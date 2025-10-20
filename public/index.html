@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawConnect Hub - Your Pet's Best Friend</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Paw Logo">
+                <div class="tagline-container">
+                    <h1>PawConnect Hub</h1>
+                    <p class="scrolling-tagline">Connecting People, Saving Paws & Spreading Love</p>
+                </div>
+
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="health.html"><i class="fas fa-heartbeat"></i> Pet Health</a></li>
+                    <li><a href="vets.html"><i class="fas fa-stethoscope"></i> Vet Listings</a></li>
+                    <li><a href="ngos.html"><i class="fas fa-hands-helping"></i> NGOs</a></li>
+                    <li><a href="rescue.html"><i class="fas fa-life-ring"></i> Rescue</a></li>
+                    <li><a href="lostfound.html"><i class="fas fa-search"></i> Lost & Found</a></li>
+                    <li><a href="adoption.html"><i class="fas fa-paw"></i> Adoption</a></li>
+                    <li><a href="emergency.html"><i class="fas fa-bell"></i> Emergency Alerts</a></li>
+                    <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+                    <li><a href="behaviour.html"><i class="fas fa-brain"></i> Pet Behavior</a></li>
+                    <li><a href="donations.html"><i class="fa-solid fa-coins"></i>Donations</a></li>
+                </ul>
+            </nav>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+        
+        <div class="auth-buttons">
+    <a href="login.html" id="loginBtn" class="btn">Login</a>
+
+    <div id="profileDropdown" class="profile-dropdown" style="display:none;">
+  <div id="profileCircle" class="profile-circle"></div>
+  <div class="dropdown-content">
+    <a href="#" id="logoutBtn">Logout</a>
+  </div>
+</div>
+
+
+
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Welcome to PawConnect Hub</h2>
+            <p>Your one-stop platform for pet health, rescue, adoption, and community care.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary" onclick="window.location.href='adoption.html'">Find a Pet to Adopt</button>
+                <button class="btn-secondary" onclick="window.location.href='community.html'">Join Our Community</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stat-item">
+                <h3>5,000+</h3>
+                <p>Pets Rescued</p>
+            </div>
+            <div class="stat-item">
+                <h3>200+</h3>
+                <p>Partner Vets</p>
+            </div>
+            <div class="stat-item">
+                <h3>50+</h3>
+                <p>NGO Partners</p>
+            </div>
+            <div class="stat-item">
+                <h3>10,000+</h3>
+                <p>Happy Members</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>Explore Our Features</h2>
+            <p class="section-subtitle">Everything you need to care for your furry friends in one place</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3>Pet Health</h3>
+                    <p>Guides, tips, and resources for keeping your pets healthy and happy.</p>
+                    <a href="health.html">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <h3>Vet Listings</h3>
+                    <p>Find trusted veterinarians near your location with verified reviews.</p>
+                    <a href="vets.html">Find Vets <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3>NGO Directory</h3>
+                    <p>Connect with animal welfare organizations making a difference.</p>
+                    <a href="ngos.html">Explore NGOs <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-life-ring"></i>
+                    </div>
+                    <h3>Rescue</h3>
+                    <p>Report and respond to rescue cases in real-time with our network.</p>
+                    <a href="rescue.html">Rescue Info <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Lost & Found</h3>
+                    <p>Help reunite lost pets with their families through our platform.</p>
+                    <a href="lostfound.html">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <h3>Adoption</h3>
+                    <p>Find loving pets that need forever homes and change a life today.</p>
+                    <a href="adoption.html">Adopt Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Emergency Alerts</h3>
+                    <p>Broadcast urgent rescue or medical needs quickly to our community.</p>
+                    <a href="alerts.html">See Alerts <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community Forum</h3>
+                    <p>Share advice, stories, and updates with fellow animal lovers.</p>
+                    <a href="community.html">Join Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Pet Behavior Tips</h3>
+                    <p>Training and handling guides for happier, well-behaved pets.</p>
+                    <a href="behavior.html">Get Tips <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot Toggle Button -->
+    <div class="chat-toggle" id="chat-toggle">
+        <i class="fas fa-comment"></i>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot" id="chatbot">
+        <div class="chat-header">
+            <div class="chat-title">
+                <h3>🐶 PawBot</h3>
+            </div>
+            <button class="chat-close" id="chat-close"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="chat-body" id="chat-body">
+            <div class="bot-msg">
+                <div class="msg-content">
+                    <p>👋 Hi! I'm PawBot. How can I help you today?</p>
+                </div>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="user-input" placeholder="Type your message..." />
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="PawConnect Logo">
+                        <h3>PawConnect Hub</h3>
+                    </div>
+                    <p>Connecting pet lovers with resources, support, and community to ensure every animal gets the care they deserve.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="adoption.html">Adoption</a></li>
+                        <li><a href="vets.html">Find a Vet</a></li>
+                        <li><a href="rescue.html">Emergency Rescue</a></li>
+                        <li><a href="community.html">Community Forum</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="health.html">Pet Health</a></li>
+                        <li><a href="behavior.html">Behavior Tips</a></li>
+                        <li><a href="lostfound.html">Lost & Found</a></li>
+                        <li><a href="ngos.html">NGO Partners</a></li>
+                        <li><a href="alerts.html">Emergency Alerts</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Pet Street, Animal City</p>
+                    <p><i class="fas fa-phone"></i> (555) 123-PAWS</p>
+                    <p><i class="fas fa-envelope"></i> help@pawconnecthub.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 PawConnect Hub | Made with ❤️ for Animals</p>
+            </div>
+        </div>
+    </footer>
+
+<script src="chatbot.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const loginBtn = document.getElementById("loginBtn");
+  const profileDropdown = document.getElementById("profileDropdown");
+  const profileCircle = document.getElementById("profileCircle");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  const username = localStorage.getItem("username");
+
+  // Show profile circle if logged in
+  if (localStorage.getItem("isLoggedIn") === "true" && username) {
+    loginBtn.style.display = "none";
+    profileDropdown.style.display = "flex";
+    profileCircle.textContent = username.charAt(0).toUpperCase();
+  }
+
+  // Toggle dropdown on profileCircle click
+  profileCircle.addEventListener("click", function(e) {
+    e.stopPropagation(); // Prevent click from bubbling to document
+    profileDropdown.classList.toggle("active");
+  });
+
+  // Logout click
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function(e) {
+      e.preventDefault();
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+
+      profileDropdown.style.display = "none";
+      loginBtn.style.display = "inline-block";
+      alert("You have been logged out.");
+    });
+  }
+
+  // Close dropdown if clicked outside
+  document.addEventListener("click", function(e) {
+    if (profileDropdown.classList.contains("active")) {
+      profileDropdown.classList.remove("active");
+    }
+  });
+});
+
+
+
+
+</script>
+</body>
+</html>

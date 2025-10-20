@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawConnect Hub | Vet Listings</title>
+    <style>
+        header {
+  background: linear-gradient(90deg, #4e54c8, #8f94fb);
+  padding: 15px 0;
+  text-align: center;
+  color: white;
+}
+
+.logo h1 {
+  font-size: 28px;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Scrolling tagline */
+.tagline-container {
+  overflow: hidden;
+  max-width: 100%;
+  margin: 5px auto 15px;
+}
+
+.scrolling-tagline {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scrollText 12s linear infinite;
+  font-size: 1rem;
+  color: #f1f1f1;
+}
+
+@keyframes scrollText {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Navigation */
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+    
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    h2 {
+      font-size: 2.5rem;
+      color: #2575fc;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    main > p {
+      font-size: 1.2rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      color: #666;
+    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: #2575fc;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .logo h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        nav ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            list-style: none;
+        }
+        
+        nav li {
+            margin: 0.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: #2575fc;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h2 {
+            font-size: 2rem;
+            color:#2575fc;
+            margin-bottom: 0.5rem;
+        }
+        
+        .search-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+        
+        .search-bar input {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .search-bar button {
+            background-color: #2575fc;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .search-bar button:hover {
+            background-color: #2575fc;
+        }
+        
+        .vet-directory {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .vet-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .vet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .vet-card h3 {
+            color: #2575fc;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #f5f5f5;
+            padding-bottom: 0.5rem;
+        }
+        
+        .vet-card p {
+            margin-bottom: 0.5rem;
+        }
+        
+        .vet-card button {
+            background-color: #2575fc;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+            width: 100%;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .vet-card button:hover {
+            background-color: #2575fc;
+        }
+        
+        .appointment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .submit-btn {
+            background-color: #2575fc;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .submit-btn:hover {
+            background-color: #2575fc;
+        }
+        
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        footer {
+            background-color: #2575fc;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .vet-directory {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+            
+            .search-bar input {
+                width: 100%;
+            }
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-style: italic;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <header>
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+      <h1>PawConnect Hub</h1>
+      
+      <!-- Scrolling tagline under logo -->
+      <div class="tagline-container">
+        <p class="scrolling-tagline">Connecting hearts and paws, spreading love, care, and hope everywhere.</p>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+     <nav>
+                <ul>
+                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="health.html"><i class="fas fa-heartbeat"></i> Pet Health</a></li>
+                    <li><a href="vets.html"><i class="fas fa-stethoscope"></i> Vet Listings</a></li>
+                    <li><a href="ngos.html"><i class="fas fa-hands-helping"></i> NGOs</a></li>
+                    <li><a href="rescue.html"><i class="fas fa-life-ring"></i> Rescue</a></li>
+                    <li><a href="lostfound.html"><i class="fas fa-search"></i> Lost & Found</a></li>
+                    <li><a href="adoption.html"><i class="fas fa-paw"></i> Adoption</a></li>
+                    <li><a href="emergency.html"><i class="fas fa-bell"></i> Emergency Alerts</a></li>
+                    <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+                    <li><a href="behaviour.html"><i class="fas fa-brain"></i> Pet Behavior</a></li>
+                    <li><a href="donations.html"><i class="fa-solid fa-coins"></i>Donations</a></li>
+                </ul>
+            </nav>
+  </div>
+</header>
+        <section class="page-header">
+            <h2>Vet Listings</h2>
+            <p>Find veterinary hospitals near your location</p>
+        </section>
+
+        <section class="search-bar">
+            <input type="text" id="locationSearch" placeholder="Enter your location (e.g., Mumbai, Andheri)">
+            <button id="searchButton">Search</button>
+        </section>
+
+        <section class="vet-directory">
+            <div class="loading">Enter a location to search for veterinary hospitals</div>
+        </section>
+    </main>
+
+    <div class="appointment-modal" id="appointmentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Book Appointment</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="appointmentForm">
+                <input type="hidden" id="hospitalId">
+                <div class="form-group">
+                    <label for="userName">Your Name</label>
+                    <input type="text" id="userName" required>
+                </div>
+                <div class="form-group">
+                    <label for="userContact">Contact Number</label>
+                    <input type="tel" id="userContact" required>
+                </div>
+                <div class="form-group">
+                    <label for="appointmentDate">Appointment Date</label>
+                    <input type="date" id="appointmentDate" required>
+                </div>
+                <button type="submit" class="submit-btn">Book Appointment</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 PawConnect Hub | Made with ❤️ for Animals</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('locationSearch');
+            const searchButton = document.getElementById('searchButton');
+            const vetDirectory = document.querySelector('.vet-directory');
+            const appointmentModal = document.getElementById('appointmentModal');
+            const closeModal = document.querySelector('.close-modal');
+            const appointmentForm = document.getElementById('appointmentForm');
+            
+            // Search when button is clicked
+            searchButton.addEventListener('click', searchVets);
+            
+            // Search when Enter key is pressed
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchVets();
+                }
+            });
+            
+            // Close modal when X is clicked
+            closeModal.addEventListener('click', function() {
+                appointmentModal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === appointmentModal) {
+                    appointmentModal.style.display = 'none';
+                }
+            });
+            
+            // Handle appointment form submission
+            appointmentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                bookAppointment();
+            });
+            
+            function searchVets() {
+                const location = searchInput.value.trim();
+                
+                if (!location) {
+                    alert('Please enter a location to search');
+                    return;
+                }
+                
+                vetDirectory.innerHTML = '<div class="loading">Searching for veterinary hospitals...</div>';
+                
+                fetch(`http://localhost:3000/api/vets?location=${encodeURIComponent(location)}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        displayVets(data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        vetDirectory.innerHTML = `
+                            <div class="no-results">
+                                <h3>Error loading veterinary hospitals</h3>
+                                <p>Please try again later</p>
+                            </div>
+                        `;
+                    });
+            }
+            
+            function displayVets(vets) {
+                if (vets.length === 0) {
+                    vetDirectory.innerHTML = `
+                        <div class="no-results">
+                            <h3>No veterinary hospitals found</h3>
+                            <p>Try searching for a different location</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                vetDirectory.innerHTML = '';
+                
+                vets.forEach(vet => {
+                    const card = document.createElement('article');
+                    card.classList.add('vet-card');
+                    card.innerHTML = `
+                        <h3>${vet.name}</h3>
+                        <p><strong>Location:</strong> ${vet.location}</p>
+                        <p><strong>Contact:</strong> ${vet.phone_number}</p>
+                        <button data-id="${vet.id}">Book Appointment</button>
+                    `;
+                    
+                    const bookButton = card.querySelector('button');
+                    bookButton.addEventListener('click', function() {
+                        openAppointmentModal(vet.id, vet.name);
+                    });
+                    
+                    vetDirectory.appendChild(card);
+                });
+            }
+            
+            function openAppointmentModal(hospitalId, hospitalName) {
+                document.getElementById('hospitalId').value = hospitalId;
+                document.querySelector('.modal-header h3').textContent = `Book Appointment at ${hospitalName}`;
+                
+                // Set minimum date to today
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('appointmentDate').min = today;
+                
+                appointmentModal.style.display = 'flex';
+            }
+            
+            function bookAppointment() {
+                const hospitalId = document.getElementById('hospitalId').value;
+                const userName = document.getElementById('userName').value;
+                const userContact = document.getElementById('userContact').value;
+                const appointmentDate = document.getElementById('appointmentDate').value;
+                
+                fetch('http://localhost:3000/api/appointments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        hospitalId: parseInt(hospitalId),
+                        userName,
+                        userContact,
+                        appointmentDate
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to book appointment');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Appointment booked successfully!');
+                    appointmentModal.style.display = 'none';
+                    appointmentForm.reset();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error booking appointment. Please try again.');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

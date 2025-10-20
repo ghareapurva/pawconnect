@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawConnect Hub - Emergency Alerts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        header {
+  background: linear-gradient(90deg, #4e54c8, #8f94fb);
+  padding: 15px 0;
+  text-align: center;
+  color: white;
+}
+
+.logo h1 {
+  font-size: 28px;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Scrolling tagline */
+.tagline-container {
+  overflow: hidden;
+  max-width: 100%;
+  margin: 5px auto 15px;
+}
+
+.scrolling-tagline {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scrollText 12s linear infinite;
+  font-size: 1rem;
+  color: #f1f1f1;
+}
+
+@keyframes scrollText {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Navigation */
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+    
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    h2 {
+      font-size: 2.5rem;
+      color: #2575fc;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    main > p {
+      font-size: 1.2rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      color: #666;
+    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        
+        
+        header h1 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        h2 {
+            font-size: 2.2rem;
+            color: #ee5a24;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        section > p {
+            font-size: 1.2rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            color: #666;
+        }
+        
+        /* Form Section */
+        #emergencyForm {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        #emergencyForm label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        #emergencyForm input,
+        #emergencyForm textarea,
+        #emergencyForm select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        #emergencyForm textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        #emergencyForm button {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        #emergencyForm button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Alert Cards */
+        .alert-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            border-left: 6px solid;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .alert-card.rescue {
+            border-left-color: #ff6b6b;
+        }
+        
+        .alert-card.medical {
+            border-left-color: #4834d4;
+        }
+        
+        .alert-card.lost {
+            border-left-color: #f9ca24;
+        }
+        
+        .alert-card.other {
+            border-left-color: #6ab04c;
+        }
+        
+        .alert-header {
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+        }
+        
+        .alert-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .alert-time {
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        .alert-body {
+            padding: 1.5rem;
+        }
+        
+        .alert-detail {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .alert-detail i {
+            color: #ee5a24;
+            min-width: 20px;
+        }
+        
+        .alert-actions {
+            display: flex;
+            gap: 1rem;
+            padding: 0 1.5rem 1.5rem;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .dismiss-btn {
+            background: #f8f9fa;
+            color: #666;
+        }
+        
+        .dismiss-btn:hover {
+            background: #e9ecef;
+        }
+        
+        .respond-btn {
+            background: #4834d4;
+            color: white;
+        }
+        
+        .respond-btn:hover {
+            background: #3c2bb9;
+        }
+        
+        .share-btn {
+            background: #6ab04c;
+            color: white;
+        }
+        
+        .share-btn:hover {
+            background: #5d9e3f;
+        }
+        
+        .no-alerts {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            color: #666;
+        }
+        
+        /* Emergency Contacts */
+        .emergency-contacts {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 3rem;
+        }
+        
+        .emergency-contacts h3 {
+            color: #ee5a24;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .contact-card {
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .contact-card h4 {
+            color: #4834d4;
+            margin-bottom: 0.5rem;
+        }
+        
+        .contact-card p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-card a {
+            color: #ee5a24;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #333;
+            color: white;
+            margin-top: 3rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .alert-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .alert-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+      <h1>PawConnect Hub</h1>
+      
+      <!-- Scrolling tagline under logo -->
+      <div class="tagline-container">
+        <p class="scrolling-tagline">Connecting hearts and paws, spreading love, care, and hope everywhere.</p>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+   <nav>
+                <ul>
+                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="health.html"><i class="fas fa-heartbeat"></i> Pet Health</a></li>
+                    <li><a href="vets.html"><i class="fas fa-stethoscope"></i> Vet Listings</a></li>
+                    <li><a href="ngos.html"><i class="fas fa-hands-helping"></i> NGOs</a></li>
+                    <li><a href="rescue.html"><i class="fas fa-life-ring"></i> Rescue</a></li>
+                    <li><a href="lostfound.html"><i class="fas fa-search"></i> Lost & Found</a></li>
+                    <li><a href="adoption.html"><i class="fas fa-paw"></i> Adoption</a></li>
+                    <li><a href="emergency.html"><i class="fas fa-bell"></i> Emergency Alerts</a></li>
+                    <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+                    <li><a href="behaviour.html"><i class="fas fa-brain"></i> Pet Behavior</a></li>
+                    <li><a href="donations.html"><i class="fa-solid fa-coins"></i>Donations</a></li>
+                </ul>
+            </nav>
+  </div>
+</header>
+
+    <main>
+        <section>
+            <h2>Broadcast an Emergency Alert</h2>
+            <p>Fill in the details to notify rescuers, NGOs, and the community immediately 🐾.</p>
+
+            <form id="emergencyForm">
+                <div class="form-group">
+                    <label for="alertType">Alert Type:</label>
+                    <select id="alertType" required>
+                        <option value="">Select alert type</option>
+                        <option value="rescue">Animal Rescue Needed</option>
+                        <option value="medical">Medical Emergency</option>
+                        <option value="lost">Lost Pet</option>
+                        <option value="abuse">Animal Abuse/Cruelty</option>
+                        <option value="other">Other Emergency</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" placeholder="Enter exact location, city, area" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="animalType">Animal Type:</label>
+                    <select id="animalType">
+                        <option value="">Select animal type</option>
+                        <option value="dog">Dog</option>
+                        <option value="cat">Cat</option>
+                        <option value="bird">Bird</option>
+                        <option value="other">Other Animal</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="urgency">Urgency Level:</label>
+                    <select id="urgency" required>
+                        <option value="high">High - Immediate Response Needed</option>
+                        <option value="medium">Medium - Urgent but not critical</option>
+                        <option value="low">Low - Information/Advisory</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="details">Emergency Details:</label>
+                    <textarea id="details" placeholder="Please describe the situation in detail..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact">Your Contact Information:</label>
+                    <input type="text" id="contact" placeholder="Phone number and/or email" required>
+                </div>
+
+                <button type="submit"><i class="fas fa-broadcast-tower"></i> Broadcast Emergency Alert</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Active Emergency Alerts</h2>
+            <div id="alertList">
+                <div class="no-alerts">
+                    <i class="fas fa-check-circle" style="font-size: 3rem; color: #6ab04c; margin-bottom: 1rem;"></i>
+                    <p>No active emergency alerts right now 🚦</p>
+                    <p>All animals are safe!</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="emergency-contacts">
+            <h3><i class="fas fa-phone-alt"></i> Emergency Contacts</h3>
+            <div class="contacts-grid">
+                <div class="contact-card">
+                    <h4>Animal Emergency Rescue</h4>
+                    <p>24/7 rescue service</p>
+                    <a href="tel:+911234567890"><i class="fas fa-phone"></i> +91 123 456 7890</a>
+                </div>
+                <div class="contact-card">
+                    <h4>Veterinary Emergency</h4>
+                    <p>Emergency medical care</p>
+                    <a href="tel:+911234567891"><i class="fas fa-phone"></i> +91 123 456 7891</a>
+                </div>
+                <div class="contact-card">
+                    <h4>Animal Cruelty Hotline</h4>
+                    <p>Report abuse cases</p>
+                    <a href="tel:+911234567892"><i class="fas fa-phone"></i> +91 123 456 7892</a>
+                </div>
+                <div class="contact-card">
+                    <h4>Lost & Found Pets</h4>
+                    <p>Report lost/found animals</p>
+                    <a href="tel:+911234567893"><i class="fas fa-phone"></i> +91 123 456 7893</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>PawConnect Hub © 2025 | Emergency Support for Pets 🐶🐱</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.querySelector("#emergencyForm");
+            const alertList = document.querySelector("#alertList");
+            
+            // Load alerts from server on page load
+            loadAlertsFromServer();
+            
+            // Form submission handler
+            if (form) {
+                form.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    
+                    // Collect form values
+                    const alertType = document.querySelector("#alertType").value;
+                    const location = document.querySelector("#location").value;
+                    const animalType = document.querySelector("#animalType").value || "Unknown";
+                    const urgency = document.querySelector("#urgency").value;
+                    const details = document.querySelector("#details").value;
+                    const contact = document.querySelector("#contact").value;
+                    
+                    // Create alert object
+                    const newAlert = {
+                        type: alertType,
+                        title: document.querySelector(`#alertType option[value="${alertType}"]`).text,
+                        location: location,
+                        animalType: animalType,
+                        urgency: urgency,
+                        details: details,
+                        contact: contact,
+                        time: "Just now"
+                    };
+                    
+                    try {
+                        // Send alert to server
+                        const response = await fetch('/api/emergency-alerts', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(newAlert)
+                        });
+                        
+                        if (response.ok) {
+                            // Remove "no alerts" message if present
+                            if (alertList.querySelector(".no-alerts")) {
+                                alertList.innerHTML = "";
+                            }
+                            
+                            // Create and add alert card
+                            createAlertCard(newAlert);
+                            
+                            // Show confirmation message
+                            alert("Emergency alert broadcasted successfully! Help is on the way.");
+                            
+                            // Clear form
+                            form.reset();
+                        } else {
+                            throw new Error('Failed to save alert to server');
+                        }
+                    } catch (error) {
+                        console.error('Error saving alert:', error);
+                        alert("There was an error broadcasting your alert. Please try again.");
+                    }
+                });
+            }
+            
+            // Load alerts from server
+            async function loadAlertsFromServer() {
+                try {
+                    const response = await fetch('/api/emergency-alerts');
+                    if (response.ok) {
+                        const alerts = await response.json();
+                        
+                        if (alerts.length > 0) {
+                            // Clear "no alerts" message
+                            alertList.innerHTML = "";
+                            
+                            // Create alert cards for each alert
+                            alerts.forEach(alert => {
+                                createAlertCard(alert);
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading alerts:', error);
+                }
+            }
+            
+            // Create alert card
+            function createAlertCard(alertData) {
+                const alertCard = document.createElement("article");
+                alertCard.classList.add("alert-card", alertData.type);
+                alertCard.dataset.id = alertData.id || Date.now(); // Use server ID or timestamp
+                
+                // Set appropriate icon based on alert type
+                let iconClass = "fas fa-exclamation-triangle";
+                if (alertData.type === "medical") iconClass = "fas fa-first-aid";
+                if (alertData.type === "lost") iconClass = "fas fa-search";
+                if (alertData.type === "abuse") iconClass = "fas fa-ban";
+                
+                alertCard.innerHTML = `
+                    <div class="alert-header">
+                        <div class="alert-title">
+                            <i class="${iconClass}"></i>
+                            <span>${alertData.title.toUpperCase()}</span>
+                            <span class="urgency-tag">${alertData.urgency.toUpperCase()}</span>
+                        </div>
+                        <div class="alert-time">
+                            <i class="fas fa-clock"></i> ${alertData.time}
+                        </div>
+                    </div>
+                    <div class="alert-body">
+                        <div class="alert-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span><strong>Location:</strong> ${alertData.location}</span>
+                        </div>
+                        <div class="alert-detail">
+                            <i class="fas fa-paw"></i>
+                            <span><strong>Animal:</strong> ${alertData.animalType}</span>
+                        </div>
+                        <div class="alert-detail">
+                            <i class="fas fa-info-circle"></i>
+                            <span><strong>Details:</strong> ${alertData.details}</span>
+                        </div>
+                        <div class="alert-detail">
+                            <i class="fas fa-user"></i>
+                            <span><strong>Contact:</strong> ${alertData.contact}</span>
+                        </div>
+                    </div>
+                    <div class="alert-actions">
+                        <button class="action-btn respond-btn">
+                            <i class="fas fa-hands-helping"></i> Respond to Alert
+                        </button>
+                        <button class="action-btn share-btn">
+                            <i class="fas fa-share-alt"></i> Share Alert
+                        </button>
+                        <button class="action-btn dismiss-btn">
+                            <i class="fas fa-times"></i> Dismiss
+                        </button>
+                    </div>
+                `;
+                
+                alertList.appendChild(alertCard);
+                
+                // Add event listener to dismiss button
+                const dismissBtn = alertCard.querySelector(".dismiss-btn");
+                dismissBtn.addEventListener("click", async () => {
+                    try {
+                        // If alert has an ID, delete it from server
+                        if (alertData.id) {
+                            await fetch(`/api/emergency-alerts/${alertData.id}`, {
+                                method: 'DELETE'
+                            });
+                        }
+                        
+                        alertCard.remove();
+                        
+                        // If no alerts remain, show placeholder text
+                        if (alertList.children.length === 0) {
+                            alertList.innerHTML = `
+                                <div class="no-alerts">
+                                    <i class="fas fa-check-circle" style="font-size: 3rem; color: #6ab04c; margin-bottom: 1rem;"></i>
+                                    <p>No active emergency alerts right now 🚦</p>
+                                    <p>All animals are safe!</p>
+                                </div>
+                            `;
+                        }
+                    } catch (error) {
+                        console.error('Error deleting alert:', error);
+                        alert("There was an error dismissing the alert. Please try again.");
+                    }
+                });
+                
+                // Add event listener to respond button
+                const respondBtn = alertCard.querySelector(".respond-btn");
+                respondBtn.addEventListener("click", () => {
+                    alert(`Thank you for responding to this alert! The contact person (${alertData.contact}) has been notified.`);
+                });
+                
+                // Add event listener to share button
+                const shareBtn = alertCard.querySelector(".share-btn");
+                shareBtn.addEventListener("click", () => {
+                    // For demo purposes - in a real app this would use the Web Share API
+                    alert(`Alert shared successfully! Help spread the word to help this animal.`);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

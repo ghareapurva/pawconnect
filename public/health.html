@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawConnect Hub | Pet Health</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+header {
+  background: linear-gradient(90deg, #4e54c8, #8f94fb);
+  padding: 15px 0;
+  text-align: center;
+  color: white;
+}
+
+.logo h1 {
+  font-size: 28px;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Scrolling tagline */
+.tagline-container {
+  overflow: hidden;
+  max-width: 100%;
+  margin: 5px auto 15px;
+}
+
+.scrolling-tagline {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scrollText 12s linear infinite;
+  font-size: 1rem;
+  color: #f1f1f1;
+}
+
+@keyframes scrollText {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Navigation */
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+        
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .page-header h2 {
+            font-size: 2.5rem;
+            color: #2575fc;
+            margin-bottom: 1rem;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Search Bar */
+        .search-bar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        #healthSearch {
+            width: 100%;
+            max-width: 500px;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            font-size: 1rem;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
+            background-repeat: no-repeat;
+            background-position: 20px center;
+            background-size: 20px;
+            padding-left: 50px;
+        }
+        
+        /* Health Resources */
+        .health-resources {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .health-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .health-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .card-content h3 {
+            font-size: 1.4rem;
+            color: #6a11cb;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .card-content p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-content ul {
+            padding-left: 1.2rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .read-more {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #2575fc;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .read-more:hover {
+            background: #1a60d0;
+        }
+        
+        /* Video Section */
+        .video-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+        
+        .video-section h2 {
+            text-align: center;
+            color: #2575fc;
+            margin-bottom: 2rem;
+        }
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .video-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-info {
+            padding: 1rem;
+        }
+        
+        .video-info h3 {
+            color: #6a11cb;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Emergency Info */
+        .emergency-info {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        
+        .emergency-info h2 {
+            margin-bottom: 1rem;
+        }
+        
+        .emergency-info p {
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .emergency-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: white;
+            color: #ee5a24;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+        
+        .emergency-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #333;
+            color: white;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .health-resources, .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+<header>
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+      <h1>PawConnect Hub</h1>
+      
+      <!-- Scrolling tagline under logo -->
+      <div class="tagline-container">
+        <p class="scrolling-tagline">Connecting hearts and paws, spreading love, care, and hope everywhere.</p>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+                <ul>
+                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="health.html"><i class="fas fa-heartbeat"></i> Pet Health</a></li>
+                    <li><a href="vets.html"><i class="fas fa-stethoscope"></i> Vet Listings</a></li>
+                    <li><a href="ngos.html"><i class="fas fa-hands-helping"></i> NGOs</a></li>
+                    <li><a href="rescue.html"><i class="fas fa-life-ring"></i> Rescue</a></li>
+                    <li><a href="lostfound.html"><i class="fas fa-search"></i> Lost & Found</a></li>
+                    <li><a href="adoption.html"><i class="fas fa-paw"></i> Adoption</a></li>
+                    <li><a href="emergency.html"><i class="fas fa-bell"></i> Emergency Alerts</a></li>
+                    <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+                    <li><a href="behaviour.html"><i class="fas fa-brain"></i> Pet Behavior</a></li>
+                    <li><a href="donations.html"><i class="fa-solid fa-coins"></i>Donations</a></li>
+                </ul>
+            </nav>
+  </div>
+</header>
+    <!-- Page Content -->
+<!-- Page Content -->
+<main>
+    <section class="page-header">
+        <h2>Pet Health Information</h2>
+        <p>Comprehensive guides, tips, and resources to keep your pets healthy and happy throughout their lives.</p>
+    </section>
+    
+    <section class="search-bar">
+        <input type="text" id="healthSearch" placeholder="🔍 Search health topics, symptoms, treatments...">
+    </section>
+
+    <section class="health-resources">
+        <article class="health-card">
+            <div class="card-image">
+                <img src="https://images.unsplash.com/photo-1517423568366-8b83523034fd?auto=format&fit=crop&w=600&h=400" alt="Healthy dog at vet checkup">
+            </div>
+            <div class="card-content">
+                <h3><i class="fas fa-dog"></i> Common Health Issues in Dogs</h3>
+                <p>Learn about common illnesses in dogs, their symptoms, and preventive care strategies.</p>
+                <ul>
+                    <li>Ear infections: Symptoms include head shaking and odor</li>
+                    <li>Skin allergies: Itching, redness, and hot spots</li>
+                    <li>Arthritis: Limping, difficulty rising, decreased activity</li>
+                    <li>Dental disease: Bad breath, difficulty eating</li>
+                    <li>Obesity: Weight management and exercise guidelines</li>
+                </ul>
+                <a href="https://www.akc.org/expert-advice/health/common-dog-diseases/" class="read-more" target="_blank">Read More</a>
+            </div>
+        </article>
+
+        <article class="health-card">
+            <div class="card-image">
+                <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=600&h=400" alt="Healthy cat being examined">
+            </div>
+            <div class="card-content">
+                <h3><i class="fas fa-cat"></i> Cat Health & Wellness</h3>
+                <p>Explore guides on cat nutrition, vaccination, and mental health requirements.</p>
+                <ul>
+                    <li>Feline Lower Urinary Tract Disease (FLUTD)</li>
+                    <li>Fleas and parasite prevention</li>
+                    <li>Kidney disease in older cats</li>
+                    <li>Diabetes symptoms and management</li>
+                    <li>Importance of regular vet check-ups</li>
+                </ul>
+                <a href="https://www.aspca.org/pet-care/cat-care/common-cat-diseases" class="read-more" target="_blank">Read More</a>
+            </div>
+        </article>
+
+                <article class="health-card">
+            <div class="card-image">
+                <img src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?auto=format&fit=crop&w=600&h=400" alt="Pet nutrition and diet chart">
+            </div>
+            <div class="card-content">
+                <h3><i class="fas fa-utensils"></i> Nutrition & Diet</h3>
+                <p>Understand proper diets, safe foods, and supplements for different pets.</p>
+                <ul>
+                    <li>Life stage appropriate nutrition</li>
+                    <li>Foods toxic to pets (chocolate, grapes, onions)</li>
+                    <li>Homemade diet considerations</li>
+                    <li>Weight management strategies</li>
+                    <li>Special dietary needs for health conditions</li>
+                </ul>
+                <a href="https://www.petmd.com/dog/nutrition/evr_dg_importance_of_nutrition_and_feeding_healthy_dog_food" class="read-more" target="_blank">Read More</a>
+            </div>
+        </article>
+
+        <article class="health-card">
+            <div class="card-image">
+                <img src="https://images.unsplash.com/photo-1596272875729-ed2ff7d6d9c5?auto=format&fit=crop&w=600&h=400" alt="Puppy vaccination at vet">
+            </div>
+            <div class="card-content">
+                <h3><i class="fas fa-syringe"></i> Vaccinations & Preventive Care</h3>
+                <p>Keep your pets safe with vaccination schedules and parasite control tips.</p>
+                <ul>
+                    <li>Core vs. non-core vaccines</li>
+                    <li>Vaccination schedules for puppies/kittens</li>
+                    <li>Heartworm prevention</li>
+                    <li>Flea and tick control methods</li>
+                    <li>Regular health screening recommendations</li>
+                </ul>
+                <a href="https://www.avma.org/resources/pet-owners/petcare/vaccinations" class="read-more" target="_blank">Read More</a>
+            </div>
+        </article>
+
+        <article class="health-card">
+            <div class="card-image">
+                <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=600&h=400" alt="Pet first aid care">
+            </div>
+            <div class="card-content">
+                <h3><i class="fas fa-first-aid"></i> Pet First Aid & Emergency Care</h3>
+                <p>Essential first aid knowledge every pet owner should have for emergencies.</p>
+                <ul>
+                    <li>CPR for dogs and cats</li>
+                    <li>Handling bleeding and wounds</li>
+                    <li>Recognizing poisoning symptoms</li>
+                    <li>Heatstroke prevention and treatment</li>
+                    <li>Creating a pet first aid kit</li>
+                </ul>
+                <a href="https://www.redcross.org/take-a-class/first-aid/cat-dog-first-aid" class="read-more" target="_blank">Read More</a>
+            </div>
+        </article>
+
+            <article class="health-card">
+            <div class="card-image">
+             <img src="https://petfaves.com/wp-content/uploads/2021/09/care-tips-for-older-dogs-683x1024.jpg" alt="Senior dog care">
+            </div>
+            <div class="card-content">
+                <h3><i class="fas fa-heart"></i> Senior Pet Care</h3>
+                <p>Special considerations for caring for aging pets and managing age-related conditions.</p>
+                <ul>
+                    <li>Arthritis management</li>
+                    <li>Cognitive dysfunction syndrome</li>
+                    <li>Dental care for older pets</li>
+                    <li>Diet adjustments for seniors</li>
+                    <li>Quality of life assessment</li>
+                </ul>
+                <a href="https://www.humanesociety.org/resources/caring-older-pets" class="read-more" target="_blank">Read More</a>
+            </div>
+        </article>
+    </section>
+
+
+
+        <section class="video-section">
+            <h2><i class="fas fa-video"></i> Educational Videos</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/dtaytJV2Njo" title="Pet First Aid" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Basic Pet First Aid</h3>
+                        <p>Learn essential first aid techniques for common pet emergencies.</p>
+                    </div>
+                </div>
+                
+                <div class="video-card">
+                    <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/JUsLlxXWch0" title="Dog & Cat Nutrition Guide" allowfullscreen></iframe>                    
+                 </div>
+                    <div class="video-info">
+                        <h3>Pet Nutrition Guide</h3>
+                        <p>Understanding what constitutes a balanced diet for your pet.</p>
+                    </div>
+                </div>
+                
+                <div class="video-card">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/bwWw-Y3PXKQ" title="Vaccination Guide" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Pet Vaccination Guide</h3>
+                        <p>Everything you need to know about vaccinating your pets.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="emergency-info">
+            <h2><i class="fas fa-exclamation-triangle"></i> Emergency Health Situations</h2>
+            <p>If your pet is experiencing any of the following symptoms, seek veterinary care immediately:</p>
+            <ul style="text-align: left; max-width: 600px; margin: 0 auto 1.5rem;">
+                <li>Difficulty breathing or choking</li>
+                <li>Seizures or loss of consciousness</li>
+                <li>Severe bleeding or trauma</li>
+                <li>Signs of extreme pain (whining, shaking, refusing to move)</li>
+                <li>Ingestion of toxic substances</li>
+                <li>Sudden paralysis or inability to move</li>
+            </ul>
+            <a href="alerts.html" class="emergency-btn"><i class="fas fa-phone-alt"></i> Emergency Contacts</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 PawConnect Hub | Made with ❤️ for Animals</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const searchInput = document.querySelector("#healthSearch");
+            const healthCards = document.querySelectorAll(".health-card");
+            
+            // Search functionality
+            if (searchInput) {
+                searchInput.addEventListener("keyup", () => {
+                    const filter = searchInput.value.toLowerCase();
+                    
+                    healthCards.forEach(card => {
+                        const text = card.textContent.toLowerCase();
+                        card.style.display = text.includes(filter) ? "block" : "none";
+                    });
+                });
+            }
+            
+            // Add interactive elements to cards
+            healthCards.forEach(card => {
+                card.addEventListener("click", (e) => {
+                    if (e.target.tagName !== "A") {
+                        const link = card.querySelector(".read-more");
+                        if (link) {
+                            window.open(link.href, "_blank");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

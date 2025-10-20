@@ -1,0 +1,1180 @@
+const express = require('express');
+const mysql = require('mysql2');
+const cors = require('cors');
+const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
+const session = require('express-session'); // Added session middleware
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static('.')); // Serve files from current directory
+
+// ===== Session middleware (Added from server (2).js) =====
+app.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // 24 hours
+}));
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = 'uploads/';
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir);
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // Generate unique filename with timestamp
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, 'pet-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ 
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: function (req, file, cb) {
+    // Check if file is an image
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'), false);
+    }
+  }
+});
+
+// MySQL connection
+const db = mysql.createConnection({
+  host: "sql12.freesqldatabase.com",
+  user: "sql12803757",
+  password: "vSG7sVDdGR",
+  database: "sql12803757",
+  port: 3306
+});
+
+// Connect to MySQL
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to MySQL:', err);
+    return;
+  }
+  console.log('Connected to MySQL database');
+  
+  // Create pets table if it doesn't exist
+  const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS pets (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      petName VARCHAR(255) NOT NULL,
+      animalType VARCHAR(50) NOT NULL,
+      breed VARCHAR(100),
+      age VARCHAR(50),
+      gender VARCHAR(20),
+      description TEXT,
+      contact VARCHAR(255) NOT NULL,
+      imagePath VARCHAR(500),
+      createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `;
+  
+  db.execute(createTableQuery, (err) => {
+    if (err) {
+      console.error('Error creating pets table:', err);
+    } else {
+      console.log('Pets table ready');
+    }
+  });
+});
+
+// ===== AUTHENTICATION ENDPOINTS (Added from server (2).js) =====
+
+// ===== Registration endpoint =====
+app.post('/register', (req, res) => {
+    const { username, email, password, role } = req.body;
+
+    if (!username || !email || !password || !role) {
+        return res.status(400).json({
+            success: false,
+            message: 'Please fill all fields'
+        });
+    }
+
+    const checkUserQuery = 'SELECT * FROM users WHERE email = ? OR username = ?';
+    db.execute(checkUserQuery, [email, username], (err, results) => {
+        if (err) {
+            return res.status(500).json({
+                success: false,
+                message: 'Database error'
+            });
+        }
+
+        if (results.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'User already exists with this email or username'
+            });
+        }
+
+        // Insert new user including role
+        const insertQuery = 'INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)';
+        db.execute(insertQuery, [username, email, password, role], (err, results) => {
+            if (err) {
+                return res.status(500).json({
+                    success: false,
+                    message: 'Registration failed: ' + err.message
+                });
+            }
+
+            res.status(201).json({
+                success: true,
+                message: '🎉 Registration successful! You can now login.'
+            });
+        });
+    });
+});
+
+// ===== Login endpoint =====
+app.post('/login', (req, res) => {
+    const { email, password, role } = req.body;
+
+    if (!email || !password || !role) {
+        return res.status(400).json({
+            success: false,
+            message: 'Please provide email, password, and role'
+        });
+    }
+
+    const query = 'SELECT * FROM users WHERE email = ? AND password = ? AND role = ?';
+    db.execute(query, [email, password, role], (err, results) => {
+        if (err) {
+            return res.status(500).json({
+                success: false,
+                message: 'Database error'
+            });
+        }
+
+        if (results.length === 0) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid email, password, or role'
+            });
+        }
+
+        const user = results[0];
+
+        // Save session
+        req.session.userId = user.id;
+        req.session.username = user.username;
+        req.session.role = user.role;
+
+        res.json({
+            success: true,
+            message: '✅ Login successful!',
+            redirect: '/'
+        });
+    });
+});
+
+// ===== Logout endpoint =====
+app.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({
+                success: false,
+                message: 'Logout failed'
+            });
+        }
+        res.clearCookie('connect.sid');
+        res.json({
+            success: true,
+            message: 'Logout successful'
+        });
+    });
+});
+
+// ===== Check auth status =====
+app.get('/auth/status', (req, res) => {
+    if (req.session.userId) {
+        res.json({
+            loggedIn: true,
+            username: req.session.username,
+            role: req.session.role
+        });
+    } else {
+        res.json({ loggedIn: false });
+    }
+});
+
+// ===== END OF AUTHENTICATION ENDPOINTS =====
+
+// Create donations table if it doesn't exist
+const createDonationsTableQuery = `
+  CREATE TABLE IF NOT EXISTS donations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    amount DECIMAL(10, 2) NOT NULL,
+    currency VARCHAR(3) DEFAULT 'INR',
+    cause VARCHAR(100) NOT NULL,
+    donor_name VARCHAR(255) NOT NULL,
+    donor_email VARCHAR(255) NOT NULL,
+    donor_phone VARCHAR(20) NOT NULL,
+    payment_method VARCHAR(50) NOT NULL,
+    payment_status ENUM('pending', 'completed', 'failed') DEFAULT 'completed',
+    transaction_id VARCHAR(255),
+    receipt_id VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`;
+
+db.execute(createDonationsTableQuery, (err) => {
+  if (err) {
+    console.error('Error creating donations table:', err);
+  } else {
+    console.log('Donations table ready');
+  }
+});
+
+// Create rescue_cases table if it doesn't exist
+const createRescueCasesTableQuery = `
+  CREATE TABLE IF NOT EXISTS rescue_cases (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    animal_type VARCHAR(50) NOT NULL,
+    conditions VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+    contact VARCHAR(255) NOT NULL,
+    urgency ENUM('High', 'Medium', 'Low') NOT NULL,
+    status ENUM('Reported', 'In Progress', 'Resolved') DEFAULT 'Reported',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`;
+
+db.execute(createRescueCasesTableQuery, (err) => {
+  if (err) {
+    console.error('Error creating rescue_cases table:', err);
+  } else {
+    console.log('Rescue_cases table ready');
+  }
+});
+
+// Create rescue_responses table if it doesn't exist
+const createRescueResponsesTableQuery = `
+  CREATE TABLE IF NOT EXISTS rescue_responses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    case_id INT NOT NULL,
+    responder_name VARCHAR(255) NOT NULL,
+    responder_contact VARCHAR(255) NOT NULL,
+    response_details TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (case_id) REFERENCES rescue_cases(id) ON DELETE CASCADE
+  )
+`;
+
+db.execute(createRescueResponsesTableQuery, (err) => {
+  if (err) {
+    console.error('Error creating rescue_responses table:', err);
+  } else {
+    console.log('Rescue_responses table ready');
+  }
+});
+
+// Create veterinary_hospitals table if it doesn't exist
+const createVetHospitalsTableQuery = `
+  CREATE TABLE IF NOT EXISTS veterinary_hospitals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`;
+
+db.execute(createVetHospitalsTableQuery, (err) => {
+  if (err) {
+    console.error('Error creating veterinary_hospitals table:', err);
+  } else {
+    console.log('Veterinary_hospitals table ready');
+  }
+});
+
+// Create appointments table if it doesn't exist
+const createAppointmentsTableQuery = `
+  CREATE TABLE IF NOT EXISTS appointments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    hospital_id INT NOT NULL,
+    user_name VARCHAR(255) NOT NULL,
+    user_contact VARCHAR(255) NOT NULL,
+    appointment_date DATETIME NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (hospital_id) REFERENCES veterinary_hospitals(id) ON DELETE CASCADE
+  )
+`;
+
+db.execute(createAppointmentsTableQuery, (err) => {
+  if (err) {
+    console.error('Error creating appointments table:', err);
+  } else {
+    console.log('Appointments table ready');
+  }
+});
+
+// Create community_posts table if it doesn't exist
+const createCommunityTableQuery = `
+  CREATE TABLE IF NOT EXISTS community_posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    category ENUM('stories', 'advice', 'questions') NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    imagePath VARCHAR(500),
+    likes_count INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`;
+
+db.execute(createCommunityTableQuery, (err) => {
+  if (err) {
+    console.error('Error creating community_posts table:', err);
+  } else {
+    console.log('Community_posts table ready');
+  }
+});
+
+// Create post_comments table if it doesn't exist
+const createCommentsTableQuery = `
+  CREATE TABLE IF NOT EXISTS post_comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    comment_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES community_posts(id) ON DELETE CASCADE
+  )
+`;
+
+db.execute(createCommentsTableQuery, (err) => {
+  if (err) {
+    console.error('Error creating post_comments table:', err);
+  } else {
+    console.log('Post_comments table ready');
+  }
+});
+
+// Create post_likes table if it doesn't exist
+const createLikesTableQuery = `
+  CREATE TABLE IF NOT EXISTS post_likes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT NOT NULL,
+    user_ip VARCHAR(45) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_like (post_id, user_ip),
+    FOREIGN KEY (post_id) REFERENCES community_posts(id) ON DELETE CASCADE
+  )
+`;
+
+db.execute(createLikesTableQuery, (err) => {
+  if (err) {
+    console.error('Error creating post_likes table:', err);
+  } else {
+    console.log('Post_likes table ready');
+  }
+});
+
+// Serve the adoption page
+app.get('/adoption', (req, res) => {
+  res.sendFile(path.join(__dirname, 'adoption.html'));
+});
+
+// API endpoint to get all pets for adoption
+app.get('/api/pets', (req, res) => {
+  const query = `
+    SELECT id, petName, animalType, breed, age, gender, description, contact, imagePath, createdAt
+    FROM pets 
+    ORDER BY createdAt DESC
+  `;
+  
+  db.execute(query, (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    // Convert image paths to URLs
+    const petsWithImageUrls = results.map(pet => {
+      if (pet.imagePath) {
+        return {
+          ...pet,
+          imageData: `/${pet.imagePath}`
+        };
+      } else {
+        // Return default image based on animal type if no image uploaded
+        const defaults = {
+          Dog: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80",
+          Cat: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=600&q=80",
+          Bird: "https://images.unsplash.com/photo-1522926193341-e9ffd686c60f?auto=format&fit=crop&w=600&q=80",
+          Rabbit: "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?auto=format&fit=crop&w=600&q=80",
+          Other: "https://images.unsplash.com/photo-1425082661705-1834bfd09dca?auto=format&fit=crop&w=600&q=80"
+        };
+        return {
+          ...pet,
+          imageData: defaults[pet.animalType] || defaults.Other
+        };
+      }
+    });
+    
+    res.json(petsWithImageUrls);
+  });
+});
+
+// API endpoint to add a new pet for adoption
+app.post('/api/pets', upload.single('petImage'), (req, res) => {
+  const { petName, animalType, breed, age, gender, description, contact } = req.body;
+  
+  // Validate input
+  if (!petName || !animalType || !description || !contact) {
+    return res.status(400).json({ error: 'Required fields are missing' });
+  }
+  
+  let imagePath = null;
+  if (req.file) {
+    imagePath = req.file.path;
+  }
+  
+  const query = `
+    INSERT INTO pets (petName, animalType, breed, age, gender, description, contact, imagePath) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+  
+  db.execute(query, [petName, animalType, breed, age, gender, description, contact, imagePath], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json({ 
+      message: 'Pet added successfully', 
+      petId: results.insertId 
+    });
+  });
+});
+
+// API endpoint to delete a pet
+app.delete('/api/pets/:id', (req, res) => {
+  const petId = req.params.id;
+  
+  // First get the pet to check if it has an image to delete
+  const getQuery = 'SELECT imagePath FROM pets WHERE id = ?';
+  
+  db.execute(getQuery, [petId], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Pet not found' });
+    }
+    
+    const pet = results[0];
+    
+    // Delete the image file if it exists
+    if (pet.imagePath && fs.existsSync(pet.imagePath)) {
+      fs.unlink(pet.imagePath, (err) => {
+        if (err) {
+          console.error('Error deleting image file:', err);
+        }
+      });
+    }
+    
+    // Now delete the pet from the database
+    const deleteQuery = 'DELETE FROM pets WHERE id = ?';
+    
+    db.execute(deleteQuery, [petId], (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      
+      res.json({ 
+        message: 'Pet removed successfully'
+      });
+    });
+  });
+});
+
+// Serve uploaded images
+app.use('/uploads', express.static('uploads'));
+
+// API endpoint to submit a rescue case
+app.post('/api/rescue-cases', (req, res) => {
+  const { animalType, conditions, location, city, description, contact, urgency } = req.body;
+  
+  // Validate input
+  if (!animalType || !conditions || !location || !city || !description || !contact || !urgency) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+  
+  const query = `
+    INSERT INTO rescue_cases (animal_type, conditions, location, city, description, contact, urgency) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+  
+  db.execute(query, [animalType, conditions, location, city, description, contact, urgency], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json({ 
+      message: 'Rescue case submitted successfully', 
+      caseId: results.insertId 
+    });
+  });
+});
+
+// API endpoint to get all rescue cases
+app.get('/api/rescue-cases', (req, res) => {
+  const query = `
+    SELECT id, animal_type, conditions, location, city, description, contact, urgency, status, created_at
+    FROM rescue_cases 
+    WHERE status != 'Resolved'
+    ORDER BY 
+      CASE urgency 
+        WHEN 'High' THEN 1 
+        WHEN 'Medium' THEN 2 
+        WHEN 'Low' THEN 3 
+      END,
+      created_at DESC
+  `;
+  
+  db.execute(query, (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json(results);
+  });
+});
+
+// API endpoint to respond to a rescue case
+app.post('/api/rescue-cases/:id/respond', (req, res) => {
+  const caseId = req.params.id;
+  const { responder, contact, details } = req.body;
+  
+  // Validate input
+  if (!responder || !contact) {
+    return res.status(400).json({ error: 'Responder name and contact are required' });
+  }
+  
+  const query = `
+    INSERT INTO rescue_responses (case_id, responder_name, responder_contact, response_details) 
+    VALUES (?, ?, ?, ?)
+  `;
+  
+  db.execute(query, [caseId, responder, contact, details || ''], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json({ 
+      message: 'Response recorded successfully', 
+      responseId: results.insertId 
+    });
+  });
+});
+
+// API endpoint to update case status
+app.put('/api/rescue-cases/:id/status', (req, res) => {
+  const caseId = req.params.id;
+  const { status } = req.body;
+  
+  // Validate input
+  if (!['Reported', 'In Progress', 'Resolved'].includes(status)) {
+    return res.status(400).json({ error: 'Invalid status value' });
+  }
+  
+  const query = `
+    UPDATE rescue_cases 
+    SET status = ? 
+    WHERE id = ?
+  `;
+  
+  db.execute(query, [status, caseId], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json({ 
+      message: 'Case status updated successfully'
+    });
+  });
+});
+
+// Veterinary hospitals endpoints
+app.get('/api/vets', (req, res) => {
+  const location = req.query.location;
+  
+  if (!location) {
+    return res.status(400).json({ error: 'Location parameter is required' });
+  }
+  
+  const query = `
+    SELECT id, name, location, phone_number 
+    FROM veterinary_hospitals 
+    WHERE location LIKE ? 
+    ORDER BY name
+  `;
+  
+  db.execute(query, [`%${location}%`], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json(results);
+  });
+});
+
+app.post('/api/appointments', (req, res) => {
+  const { hospitalId, userName, userContact, appointmentDate } = req.body;
+  
+  // Validate input
+  if (!hospitalId || !userName || !userContact || !appointmentDate) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+  
+  const query = `
+    INSERT INTO appointments (hospital_id, user_name, user_contact, appointment_date) 
+    VALUES (?, ?, ?, ?)
+  `;
+  
+  db.execute(query, [hospitalId, userName, userContact, appointmentDate], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json({ 
+      message: 'Appointment booked successfully', 
+      appointmentId: results.insertId 
+    });
+  });
+});
+
+// Serve other pages
+app.get('/rescue', (req, res) => {
+  res.sendFile(path.join(__dirname, 'rescue.html'));
+});
+
+// Serve the community page
+app.get('/community', (req, res) => {
+  res.sendFile(path.join(__dirname, 'community.html'));
+});
+
+// API endpoint to get all community posts with comments
+app.get('/api/community/posts', (req, res) => {
+  const query = `
+    SELECT cp.*, 
+           COUNT(DISTINCT pl.id) AS likes_count,
+           GROUP_CONCAT(
+             DISTINCT CONCAT_WS('|||', pc.author, pc.comment_text, pc.created_at) 
+             ORDER BY pc.created_at SEPARATOR ';;;;'
+           ) AS comments_data
+    FROM community_posts cp
+    LEFT JOIN post_likes pl ON cp.id = pl.post_id
+    LEFT JOIN post_comments pc ON cp.id = pc.post_id
+    GROUP BY cp.id
+    ORDER BY cp.created_at DESC
+  `;
+  
+  db.execute(query, (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    // Process results to format comments properly
+    const postsWithComments = results.map(post => {
+      let comments = [];
+      
+      if (post.comments_data) {
+        comments = post.comments_data.split(';;;;').map(commentStr => {
+          const [author, comment_text, created_at] = commentStr.split('|||');
+          return { author, comment_text, created_at };
+        });
+      }
+      
+      return {
+        ...post,
+        likes_count: parseInt(post.likes_count) || 0,
+        comments
+      };
+    });
+    
+    res.json(postsWithComments);
+  });
+});
+
+// API endpoint to add a new community post
+app.post('/api/community/posts', upload.single('postImage'), (req, res) => {
+  const { title, content, category, author } = req.body;
+  
+  // Validate input
+  if (!title || !content || !category || !author) {
+    return res.status(400).json({ error: 'Required fields are missing' });
+  }
+  
+  let imagePath = null;
+  if (req.file) {
+    imagePath = req.file.path;
+  }
+  
+  const query = `
+    INSERT INTO community_posts (title, content, category, author, imagePath) 
+    VALUES (?, ?, ?, ?, ?)
+  `;
+  
+  db.execute(query, [title, content, category, author, imagePath], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json({ 
+      message: 'Post created successfully', 
+      postId: results.insertId 
+    });
+  });
+});
+
+// API endpoint to like a post
+app.post('/api/community/posts/:id/like', (req, res) => {
+  const postId = req.params.id;
+  const userIp = req.ip || req.connection.remoteAddress;
+  
+  // First check if user already liked this post
+  const checkQuery = 'SELECT id FROM post_likes WHERE post_id = ? AND user_ip = ?';
+  
+  db.execute(checkQuery, [postId, userIp], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    if (results.length > 0) {
+      // User already liked this post
+      return res.status(400).json({ error: 'You already liked this post' });
+    }
+    
+    // Add like
+    const likeQuery = 'INSERT INTO post_likes (post_id, user_ip) VALUES (?, ?)';
+    
+    db.execute(likeQuery, [postId, userIp], (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      
+      // Update likes count in community_posts table
+      const updateQuery = 'UPDATE community_posts SET likes_count = likes_count + 1 WHERE id = ?';
+      
+      db.execute(updateQuery, [postId], (err, results) => {
+        if (err) {
+          console.error('Error executing query:', err);
+          return res.status(500).json({ error: 'Database error' });
+        }
+        
+        res.json({ 
+          message: 'Post liked successfully'
+        });
+      });
+    });
+  });
+});
+
+// API endpoint to add a comment to a post
+app.post('/api/community/posts/:id/comment', (req, res) => {
+  const postId = req.params.id;
+  const { author, comment_text } = req.body;
+  
+  // Validate input
+  if (!comment_text) {
+    return res.status(400).json({ error: 'Comment text is required' });
+  }
+  
+  // Use a default author if not provided
+  const commentAuthor = author || 'Anonymous';
+  
+  const query = `
+    INSERT INTO post_comments (post_id, author, comment_text) 
+    VALUES (?, ?, ?)
+  `;
+  
+  db.execute(query, [postId, commentAuthor, comment_text], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json({ 
+      message: 'Comment added successfully', 
+      commentId: results.insertId 
+    });
+  });
+});
+
+// API endpoint to delete a post
+app.delete('/api/community/posts/:id', (req, res) => {
+  const postId = req.params.id;
+  
+  // First get the post to check if it has an image to delete
+  const getQuery = 'SELECT imagePath FROM community_posts WHERE id = ?';
+  
+  db.execute(getQuery, [postId], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    
+    const post = results[0];
+    
+    // Delete the image file if it exists
+    if (post.imagePath && fs.existsSync(post.imagePath)) {
+      fs.unlink(post.imagePath, (err) => {
+        if (err) {
+          console.error('Error deleting image file:', err);
+        }
+      });
+    }
+    
+    // Now delete the post from the database
+    // (CASCADE will automatically delete related comments and likes)
+    const deleteQuery = 'DELETE FROM community_posts WHERE id = ?';
+    
+    db.execute(deleteQuery, [postId], (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      
+      res.json({ 
+        message: 'Post deleted successfully'
+      });
+    });
+  });
+});
+
+// Serve the donation page
+app.get('/donation', (req, res) => {
+  res.sendFile(path.join(__dirname, 'donation.html'));
+});
+
+// API endpoint to process donations
+app.post('/api/donations', (req, res) => {
+  const { amount, cause, donor_name, donor_email, donor_phone, payment_method } = req.body;
+  
+  // Validate input
+  if (!amount || !cause || !donor_name || !donor_email || !donor_phone || !payment_method) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+  
+  // Generate receipt ID
+  const receiptId = 'PC-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+  
+  const query = `
+    INSERT INTO donations (amount, cause, donor_name, donor_email, donor_phone, payment_method, receipt_id) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+  
+  db.execute(query, [amount, cause, donor_name, donor_email, donor_phone, payment_method, receiptId], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json({ 
+      success: true,
+      message: 'Donation recorded successfully',
+      donationId: results.insertId,
+      receiptId: receiptId,
+      timestamp: new Date().toISOString()
+    });
+  });
+});
+
+// API endpoint to get donation statistics (for admin dashboard)
+app.get('/api/donations/stats', (req, res) => {
+  const query = `
+    SELECT 
+      COUNT(*) as total_donations,
+      SUM(amount) as total_amount,
+      cause,
+      DATE(created_at) as donation_date
+    FROM donations 
+    WHERE payment_status = 'completed'
+    GROUP BY cause, DATE(created_at)
+    ORDER BY donation_date DESC
+  `;
+  
+  db.execute(query, (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json(results);
+  });
+});
+
+// API endpoint to get all donations (for admin)
+app.get('/api/donations', (req, res) => {
+  const query = `
+    SELECT id, amount, cause, donor_name, donor_email, donor_phone, payment_method, receipt_id, created_at
+    FROM donations 
+    ORDER BY created_at DESC
+  `;
+  
+  db.execute(query, (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json(results);
+  });
+});
+
+// Default route
+app.get('/', (req, res) => {
+  res.send('PawConnect Hub Server is running!');
+});
+
+// Create lost_found_reports table if it doesn't exist
+const createLostFoundTableQuery = `
+  CREATE TABLE IF NOT EXISTS lost_found_reports (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    status ENUM('Lost', 'Found') NOT NULL,
+    petName VARCHAR(255),
+    animalType VARCHAR(50) NOT NULL,
+    breed VARCHAR(100),
+    location VARCHAR(255) NOT NULL,
+    date DATE NOT NULL,
+    color VARCHAR(100),
+    description TEXT NOT NULL,
+    contact VARCHAR(255) NOT NULL,
+    reward VARCHAR(100),
+    imagePath VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`;
+
+db.execute(createLostFoundTableQuery, (err) => {
+  if (err) {
+    console.error('Error creating lost_found_reports table:', err);
+  } else {
+    console.log('Lost_found_reports table ready');
+  }
+});
+
+// API endpoint to submit a lost/found report
+app.post('/api/lostfound', upload.single('petImage'), (req, res) => {
+  const { status, petName, animalType, breed, location, date, color, description, contact, reward } = req.body;
+  
+  // Validate input
+  if (!status || !animalType || !location || !date || !description || !contact) {
+    return res.status(400).json({ error: 'Required fields are missing' });
+  }
+  
+  let imagePath = null;
+  if (req.file) {
+    imagePath = req.file.path;
+  }
+  
+  const query = `
+    INSERT INTO lost_found_reports (status, petName, animalType, breed, location, date, color, description, contact, reward, imagePath) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+  
+  db.execute(query, [status, petName, animalType, breed, location, date, color, description, contact, reward, imagePath], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json({ 
+      message: 'Report submitted successfully', 
+      reportId: results.insertId 
+    });
+  });
+});
+
+// API endpoint to get all lost/found reports
+app.get('/api/lostfound', (req, res) => {
+  const query = `
+    SELECT id, status, petName, animalType, breed, location, date, color, description, contact, reward, imagePath, created_at
+    FROM lost_found_reports 
+    ORDER BY created_at DESC
+  `;
+  
+  db.execute(query, (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    // Convert image paths to URLs
+    const reportsWithImageUrls = results.map(report => {
+      if (report.imagePath) {
+        return {
+          ...report,
+          imageData: `/${report.imagePath}`
+        };
+      } else {
+        // Return default image based on animal type if no image uploaded
+        const defaults = {
+          Dog: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80",
+          Cat: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=600&q=80",
+          Bird: "https://images.unsplash.com/photo-1522926193341-e9ffd686c60f?auto=format&fit=crop&w=600&q=80",
+          Rabbit: "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?auto=format&fit=crop&w=600&q=80"
+        };
+        
+        return {
+          ...report,
+          imageData: defaults[report.animalType] || "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=600&q=80"
+        };
+      }
+    });
+    
+    res.json(reportsWithImageUrls);
+  });
+});
+
+// Add this to server.js after the other table creation queries
+
+// Create emergency_alerts table if it doesn't exist
+const createEmergencyAlertsTableQuery = `
+  CREATE TABLE IF NOT EXISTS emergency_alerts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(50) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    animal_type VARCHAR(50),
+    urgency VARCHAR(20) NOT NULL,
+    details TEXT NOT NULL,
+    contact VARCHAR(255) NOT NULL,
+    status ENUM('active', 'resolved') DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`;
+
+db.execute(createEmergencyAlertsTableQuery, (err) => {
+  if (err) {
+    console.error('Error creating emergency_alerts table:', err);
+  } else {
+    console.log('Emergency_alerts table ready');
+  }
+});
+
+// API endpoint to submit an emergency alert
+app.post('/api/emergency-alerts', (req, res) => {
+  const { type, title, location, animalType, urgency, details, contact } = req.body;
+  
+  // Validate input
+  if (!type || !title || !location || !urgency || !details || !contact) {
+    return res.status(400).json({ error: 'Required fields are missing' });
+  }
+  
+  const query = `
+    INSERT INTO emergency_alerts (type, title, location, animal_type, urgency, details, contact) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+  
+  db.execute(query, [type, title, location, animalType, urgency, details, contact], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json({ 
+      message: 'Emergency alert submitted successfully', 
+      alertId: results.insertId 
+    });
+  });
+});
+
+// API endpoint to get all active emergency alerts
+app.get('/api/emergency-alerts', (req, res) => {
+  const query = `
+    SELECT id, type, title, location, animal_type as animalType, urgency, details, contact, 
+           DATE_FORMAT(created_at, '%H:%i %d/%m/%Y') as time
+    FROM emergency_alerts 
+    WHERE status = 'active'
+    ORDER BY 
+      CASE urgency 
+        WHEN 'high' THEN 1 
+        WHEN 'medium' THEN 2 
+        WHEN 'low' THEN 3 
+      END,
+      created_at DESC
+  `;
+  
+  db.execute(query, (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    res.json(results);
+  });
+});
+
+// API endpoint to delete/resolve an emergency alert
+app.delete('/api/emergency-alerts/:id', (req, res) => {
+  const alertId = req.params.id;
+  
+  // Instead of deleting, we'll mark it as resolved
+  const query = `
+    UPDATE emergency_alerts 
+    SET status = 'resolved' 
+    WHERE id = ?
+  `;
+  
+  db.execute(query, [alertId], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'Alert not found' });
+    }
+    
+    res.json({ 
+      message: 'Alert resolved successfully'
+    });
+  });
+});
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Adoption page available at http://localhost:${PORT}/adoption`);
+  console.log(`Rescue page available at http://localhost:${PORT}/rescue`);
+  console.log(`Donation page available at http://localhost:${PORT}/donation`);
+  console.log(`Community page available at http://localhost:${PORT}/community`);
+});

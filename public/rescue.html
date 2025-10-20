@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawConnect Hub | Rescue Operations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+       header {
+  background: linear-gradient(90deg, #4e54c8, #8f94fb);
+  padding: 15px 0;
+  text-align: center;
+  color: white;
+}
+
+.logo h1 {
+  font-size: 28px;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Scrolling tagline */
+.tagline-container {
+  overflow: hidden;
+  max-width: 100%;
+  margin: 5px auto 15px;
+}
+
+.scrolling-tagline {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scrollText 12s linear infinite;
+  font-size: 1rem;
+  color: #f1f1f1;
+}
+
+@keyframes scrollText {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Navigation */
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+    
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    h2 {
+      font-size: 2.5rem;
+      color: #2575fc;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    main > p {
+      font-size: 1.2rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      color: #666;
+    }
+       /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .logo p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        nav {
+            margin-top: 1rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover, nav a.active {
+            opacity: 1;
+        }
+        
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #ffcb05;
+            border-radius: 3px;
+        }
+        
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+        
+        .page-header::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #4e54c8, #8f94fb);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+        
+        .page-header h2 {
+            font-size: 2.2rem;
+            color: #4e54c8;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        /* Hero Section */
+        .rescue-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1546190255-451a91afc548?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .rescue-hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .rescue-hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Form Section */
+        .rescue-form {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+        }
+        
+        .rescue-form h3 {
+            color: #4e54c8;
+            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #4e54c8;
+            box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.2);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        button[type="submit"] {
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 1.5rem auto 0;
+            min-width: 200px;
+        }
+        
+        button[type="submit"]:hover {
+            background: linear-gradient(135deg, #3f44b0, #7a80e2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 84, 200, 0.3);
+        }
+        
+        /* Rescue Cases Section */
+        .rescue-cases {
+            margin-bottom: 3rem;
+        }
+        
+        .rescue-cases h3 {
+            color: #4e54c8;
+            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .rescue-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .rescue-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .rescue-card:hover .card-image img {
+            transform: scale(1.05);
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .card-content h4 {
+            color: #4e54c8;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .card-content p {
+            margin-bottom: 0.8rem;
+            color: #555;
+        }
+        
+        .card-content strong {
+            color: #333;
+        }
+        
+        .urgency-high {
+            display: inline-block;
+            background: #ff4757;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .urgency-medium {
+            display: inline-block;
+            background: #ffa502;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .urgency-low {
+            display: inline-block;
+            background: #2ed573;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .rescue-card button {
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .rescue-card button:hover {
+            background: linear-gradient(135deg, #3f44b0, #7a80e2);
+            transform: scale(1.03);
+        }
+        
+        /* Emergency Contact Section */
+        .emergency-contact {
+            background: linear-gradient(135deg, #ff6b6b, #ff4757);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .emergency-contact h3 {
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+        
+        .emergency-contact p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .emergency-btn {
+            background: white;
+            color: #ff4757;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .emergency-btn:hover {
+            background: #f1f1f1;
+            transform: scale(1.05);
+        }
+        
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .rescue-hero h2 {
+                font-size: 2rem;
+            }
+            
+            .rescue-hero p {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+            
+            nav ul {
+                gap: 0.8rem;
+                justify-content: center;
+            }
+            
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+            
+            .rescue-form, .rescue-card {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .image-upload-container {
+            grid-column: 1 / -1;
+            margin-bottom: 1.2rem;
+        }
+        
+        .image-preview {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .preview-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .preview-item .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255,255,255,0.8);
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .upload-btn {
+            background: #f1f1f1;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-btn:hover {
+            border-color: #4e54c8;
+            background: #f8f9ff;
+        }
+        
+        .upload-btn i {
+            font-size: 2rem;
+            color: #4e54c8;
+            margin-bottom: 0.5rem;
+        }
+        
+        #imageInput {
+            display: none;
+        }
+    
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+      <h1>PawConnect Hub</h1>
+      
+      <!-- Scrolling tagline under logo -->
+      <div class="tagline-container">
+        <p class="scrolling-tagline">Connecting hearts and paws, spreading love, care, and hope everywhere.</p>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+   <nav>
+                <ul>
+                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="health.html"><i class="fas fa-heartbeat"></i> Pet Health</a></li>
+                    <li><a href="vets.html"><i class="fas fa-stethoscope"></i> Vet Listings</a></li>
+                    <li><a href="ngos.html"><i class="fas fa-hands-helping"></i> NGOs</a></li>
+                    <li><a href="rescue.html"><i class="fas fa-life-ring"></i> Rescue</a></li>
+                    <li><a href="lostfound.html"><i class="fas fa-search"></i> Lost & Found</a></li>
+                    <li><a href="adoption.html"><i class="fas fa-paw"></i> Adoption</a></li>
+                    <li><a href="emergency.html"><i class="fas fa-bell"></i> Emergency Alerts</a></li>
+                    <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+                    <li><a href="behaviour.html"><i class="fas fa-brain"></i> Pet Behavior</a></li>
+                    <li><a href="donations.html"><i class="fa-solid fa-coins"></i>Donations</a></li>
+                </ul>
+            </nav>
+  </div>
+</header>
+
+    <!-- Page Content -->
+    <main>
+        <section class="page-header">
+            <h2>Rescue Operations</h2>
+            <p>Report injured or stranded animals and respond to active rescue cases.</p>
+        </section>
+        
+        <!-- Hero Section -->
+        <section class="rescue-hero">
+            <h2>Every Life Matters</h2>
+            <p>Your report could save an animal in distress. Together we can make a difference.</p>
+        </section>
+
+        <!-- Emergency Contact Section -->
+        <section class="emergency-contact">
+            <h3><i class="fas fa-exclamation-triangle"></i> Emergency Rescue Line</h3>
+            <p>For immediate assistance with critically injured animals</p>
+            <button class="emergency-btn"><i class="fas fa-phone"></i> CALL 1800-PAW-RESCUE</button>
+        </section>
+
+        <!-- Report Rescue Form -->
+        <section class="rescue-form">
+            <h3><i class="fas fa-paw"></i> Report a Rescue Case</h3>
+            <form id="rescueReportForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="animalType">Animal Type:</label>
+                        <select id="animalType" required>
+                            <option value="">Select animal type</option>
+                            <option value="Dog">Dog</option>
+                            <option value="Cat">Cat</option>
+                            <option value="Bird">Bird</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="condition">Animal Condition:</label>
+                        <select id="condition" required>
+                            <option value="">Select condition</option>
+                            <option value="Injured">Injured</option>
+                            <option value="Stranded">Stranded/Trapped</option>
+                            <option value="Abandoned">Abandoned</option>
+                            <option value="Sick">Sick</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Location:</label>
+                        <input type="text" id="location" placeholder="Enter exact location" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="city">City:</label>
+                        <input type="text" id="city" placeholder="Enter city" required>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="description">Description:</label>
+                        <textarea id="description" placeholder="Please describe the situation in detail, including any visible injuries, how long the animal has been there, etc." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact">Your Contact:</label>
+                        <input type="text" id="contact" placeholder="Phone or Email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="urgency">Urgency Level:</label>
+                        <select id="urgency" required>
+                            <option value="High">High - Immediate attention needed</option>
+                            <option value="Medium">Medium - Attention needed today</option>
+                            <option value="Low">Low - Monitoring situation</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" id="submitBtn"><i class="fas fa-paper-plane"></i> Submit Report</button>
+            </form>
+        </section>
+
+        <!-- Active Rescue Cases -->
+        <section class="rescue-cases">
+            <h3><i class="fas fa-first-aid"></i> Active Rescue Cases</h3>
+            <div class="cases-grid" id="rescueCasesContainer">
+                <!-- Cases will be loaded dynamically from the server -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 PawConnect Hub | Made with ❤️ for Animals</p>
+    </footer>
+
+    <!-- JavaScript -->
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const rescueForm = document.getElementById('rescueReportForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const rescueCasesContainer = document.getElementById('rescueCasesContainer');
+            
+            // Load rescue cases when page loads
+            loadRescueCases();
+            
+            // Form submission handler
+            rescueForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Get form values - FIXED: Changed 'condition' to 'conditions'
+                const animalType = document.getElementById('animalType').value;
+                const conditions = document.getElementById('condition').value; // This matches backend
+                const location = document.getElementById('location').value;
+                const city = document.getElementById('city').value;
+                const description = document.getElementById('description').value;
+                const contact = document.getElementById('contact').value;
+                const urgency = document.getElementById('urgency').value;
+                
+                // Show loading state
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<div class="loading"></div> Submitting...';
+                submitBtn.disabled = true;
+                
+                try {
+                    // Send data to server - FIXED: Changed 'condition' to 'conditions'
+                    const response = await fetch('http://localhost:3000/api/rescue-cases', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            animalType,
+                            conditions, // This now matches backend expectation
+                            location,
+                            city,
+                            description,
+                            contact,
+                            urgency
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.error || 'Failed to submit rescue case');
+                    }
+                    
+                    // Show success message
+                    alert(`Thank you for reporting! Your ${animalType} rescue case in ${location} has been submitted. Our team will respond shortly.`);
+                    
+                    // Reset form
+                    rescueForm.reset();
+                    
+                    // Reload cases to show the new one
+                    loadRescueCases();
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Sorry, there was an error submitting your report. Please try again.');
+                } finally {
+                    // Restore button state
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+            
+            // Function to load rescue cases from server
+            async function loadRescueCases() {
+                try {
+                    const response = await fetch('http://localhost:3000/api/rescue-cases');
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to load rescue cases');
+                    }
+                    
+                    const cases = await response.json();
+                    
+                    // Clear container
+                    rescueCasesContainer.innerHTML = '';
+                    
+                    if (cases.length === 0) {
+                        rescueCasesContainer.innerHTML = `
+                            <div class="no-results">
+                                <p>No active rescue cases at the moment.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    // Add cases to the container
+                    cases.forEach(rescueCase => {
+                        const urgencyClass = `urgency-${rescueCase.urgency.toLowerCase()}`;
+                        
+                        const caseElement = document.createElement('article');
+                        caseElement.classList.add('rescue-card');
+                        caseElement.innerHTML = `
+                            <div class="card-image">
+                                <img src="${getAnimalImage(rescueCase.animal_type)}" alt="${rescueCase.animal_type}">
+                            </div>
+                            <div class="card-content">
+                                <span class="${urgencyClass}">${rescueCase.urgency} Urgency</span>
+                                <h4>${rescueCase.animal_type} - ${rescueCase.conditions}</h4>
+                                <p><strong>Location:</strong> ${rescueCase.location}, ${rescueCase.city}</p>
+                                <p><strong>Description:</strong> ${rescueCase.description}</p>
+                                <p><strong>Reported By:</strong> ${rescueCase.contact}</p>
+                                <p><strong>Reported On:</strong> ${new Date(rescueCase.created_at).toLocaleDateString()}</p>
+                                <button onclick="openRespondModal(${rescueCase.id})">Respond to Rescue</button>
+                            </div>
+                        `;
+                        
+                        rescueCasesContainer.appendChild(caseElement);
+                    });
+                    
+                } catch (error) {
+                    console.error('Error loading rescue cases:', error);
+                    rescueCasesContainer.innerHTML = `
+                        <div class="no-results">
+                            <p>Error loading rescue cases. Please try again later.</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Function to get appropriate animal image
+            function getAnimalImage(animalType) {
+                const images = {
+                    'Dog': 'https://images.unsplash.com/photo-1544568160-8c2c497a482a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
+                    'Cat': 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
+                    'Bird': 'https://images.unsplash.com/photo-1551085255-e5b1f6e9c9f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
+                    'Other': 'https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80'
+                };
+                
+                return images[animalType] || images['Other'];
+            }
+        });
+        
+        // Modal for rescue response
+        function openRespondModal(caseId) {
+            const responderName = prompt('Please enter your name:');
+            if (!responderName) return;
+            
+            const responderContact = prompt('Please enter your contact information:');
+            if (!responderContact) return;
+            
+            const responseDetails = prompt('Please provide details about how you can help:') || '';
+            
+            respondToRescue(caseId, responderName, responderContact, responseDetails);
+        }
+        
+        // Global function to respond to rescue
+        async function respondToRescue(caseId, responder, contact, details) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/rescue-cases/${caseId}/respond`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        responder,
+                        contact,
+                        details
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to submit response');
+                }
+                
+                alert(`Thank you for responding to rescue case #${caseId}! Our team will contact you shortly.`);
+                
+            } catch (error) {
+                console.error('Error responding to rescue:', error);
+                alert('Sorry, there was an error submitting your response. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

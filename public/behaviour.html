@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PawConnect Hub - Pet Behavior Tips</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    header {
+  background: linear-gradient(90deg, #4e54c8, #8f94fb);
+  padding: 15px 0;
+  text-align: center;
+  color: white;
+}
+
+.logo h1 {
+  font-size: 28px;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Scrolling tagline */
+.tagline-container {
+  overflow: hidden;
+  max-width: 100%;
+  margin: 5px auto 15px;
+}
+
+.scrolling-tagline {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scrollText 12s linear infinite;
+  font-size: 1rem;
+  color: #f1f1f1;
+}
+
+@keyframes scrollText {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Navigation */
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+    
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    h2 {
+      font-size: 2.5rem;
+      color: #2575fc;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    main > p {
+      font-size: 1.2rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      color: #666;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header h1::before {
+      content: '🐾';
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      gap: 1rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      color: #2575fc;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    main > p {
+      font-size: 1.2rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      color: #666;
+    }
+
+    /* Search Section */
+    .search-section {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    #tipSearch {
+      width: 100%;
+      max-width: 500px;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 50px;
+      font-size: 1rem;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
+      background-repeat: no-repeat;
+      background-position: 20px center;
+      background-size: 20px;
+      padding-left: 50px;
+    }
+
+    /* Tips Section */
+    .tips-section {
+      margin-bottom: 3rem;
+    }
+
+    .tips-section h3 {
+      font-size: 1.8rem;
+      color: #2575fc;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .tips-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .tip-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+
+    .tip-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .tip-image {
+      height: 160px;
+      overflow: hidden;
+    }
+
+    .tip-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .tip-content {
+      padding: 1.5rem;
+    }
+
+    .tip-content h4 {
+      font-size: 1.3rem;
+      color: #6a11cb;
+      margin-bottom: 0.5rem;
+    }
+
+    .tip-content p {
+      color: #666;
+      margin-bottom: 1rem;
+    }
+
+    .tip-content ul {
+      padding-left: 1.2rem;
+      color: #555;
+    }
+
+    .tip-content li {
+      margin-bottom: 0.5rem;
+    }
+
+    .video-link {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #2575fc;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .video-link:hover {
+      background-color: #1a60d0;
+    }
+
+    /* Category Filter */
+    .category-filter {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .filter-btn {
+      background: white;
+      border: 2px solid #2575fc;
+      color: #2575fc;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: #2575fc;
+      color: white;
+    }
+
+    /* Resources Section */
+    .resources-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 3rem;
+    }
+
+    .resources-section h3 {
+      font-size: 1.8rem;
+      color: #2575fc;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .resource-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: #f0f8ff;
+      border-radius: 8px;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .resource-item:hover {
+      transform: translateY(-3px);
+    }
+
+    .resource-icon {
+      font-size: 1.5rem;
+      color: #6a11cb;
+    }
+
+    /* Resource dropdown content */
+    .resource-content {
+      margin: 0.5rem 0 1.5rem 2.5rem;
+      padding-left: 1rem;
+      list-style: disc;
+      display: none;
+      color: #444;
+    }
+
+    .resource-content li {
+      margin: 0.3rem 0;
+    }
+
+    .resource-content a {
+      color: #2575fc;
+      text-decoration: none;
+    }
+
+    .resource-content a:hover {
+      text-decoration: underline;
+    }
+
+    .resource-content.show {
+      display: block;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: #333;
+      color: white;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .tips-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    .faq-section {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.faq-section h2 {
+  text-align: center;
+  color: #2575fc;
+  margin-bottom: 1.5rem;
+}
+
+.faq-item {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+
+.faq-question {
+  width: 100%;
+  text-align: left;
+  padding: 0.8rem;
+  font-size: 1rem;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #333;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.faq-question:hover {
+  color: var(--primary);
+}
+
+.faq-answer {
+  max-height: 0;              /* start hidden */
+  overflow: hidden;
+  padding: 0 1rem;            /* horizontal padding always */
+  color: #333;                /* darker text */
+  font-size: 1rem;            /* larger font */
+  line-height: 1.5;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+}
+
+.faq-item.active .faq-answer {
+  max-height: 500px;          /* large enough to show content */
+  padding: 0.8rem 1rem;       /* add vertical padding when shown */
+}
+
+.scrolling-text {
+  overflow: hidden;
+  white-space: nowrap;
+  border-top: 1px solid rgba(255,255,255,0.3);
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  margin-top: 0.5rem;
+  padding: 0.3rem 0;
+}
+
+.scrolling-text p {
+  display: inline-block;
+  padding-left: 100%;
+  font-weight: bold;
+  color: #5e1ee7;
+  font-size: 1rem;
+  animation: scrollText 15s linear infinite;
+}
+
+@keyframes scrollText {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+
+  </style>
+</head>
+<body>
+  <header>
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+      <h1>PawConnect Hub</h1>
+      
+      <!-- Scrolling tagline under logo -->
+      <div class="tagline-container">
+        <p class="scrolling-tagline">Connecting hearts and paws, spreading love, care, and hope everywhere.</p>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+   <nav>
+                <ul>
+                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="health.html"><i class="fas fa-heartbeat"></i> Pet Health</a></li>
+                    <li><a href="vets.html"><i class="fas fa-stethoscope"></i> Vet Listings</a></li>
+                    <li><a href="ngos.html"><i class="fas fa-hands-helping"></i> NGOs</a></li>
+                    <li><a href="rescue.html"><i class="fas fa-life-ring"></i> Rescue</a></li>
+                    <li><a href="lostfound.html"><i class="fas fa-search"></i> Lost & Found</a></li>
+                    <li><a href="adoption.html"><i class="fas fa-paw"></i> Adoption</a></li>
+                    <li><a href="emergency.html"><i class="fas fa-bell"></i> Emergency Alerts</a></li>
+                    <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+                    <li><a href="behaviour.html"><i class="fas fa-brain"></i> Pet Behavior</a></li>
+                    <li><a href="donations.html"><i class="fa-solid fa-coins"></i>Donations</a></li>
+                </ul>
+            </nav>
+  </div>
+</header>
+
+
+
+
+  <main>
+    <h2>Pet Behavior & Training Tips</h2>
+    <p>Understand your furry friends better 🐕🐈. Here are some tips and guides to help with training and behavior.</p>
+
+    <!-- Search Bar -->
+    <section class="search-section">
+      <input type="text" id="tipSearch" placeholder="Search behavior tips...">
+    </section>
+    
+    <!-- Category Filter -->
+    <div class="category-filter">
+      <button class="filter-btn active" data-category="all">All Tips</button>
+      <button class="filter-btn" data-category="dogs">Dogs</button>
+      <button class="filter-btn" data-category="cats">Cats</button>
+      <button class="filter-btn" data-category="training">Training</button>
+      <button class="filter-btn" data-category="anxiety">Anxiety</button>
+    </div>
+
+    <!-- Behavior Tips -->
+    <section class="tips-section">
+      <h3>Popular Behavior Tips</h3>
+      <div class="tips-container" id="tipsList">
+        <div class="tip-card" data-categories="dogs training">
+          <div class="tip-image">
+            <img src="https://floridapolitics.com/wp-content/uploads/2015/09/dangerous-dog-copy-1024x1024.jpg" alt="Dog training">
+          </div>
+          <div class="tip-content">
+            <h4>Barking Issues</h4>
+            <p>Solutions for excessive barking</p>
+            <ul>
+              <li>Provide adequate exercise and mental stimulation</li>
+              <li>Teach the "quiet" command with positive reinforcement</li>
+              <li>Avoid punishment as it can increase anxiety</li>
+              <li>Identify and address the root cause of barking</li>
+            </ul>
+            <a href="https://www.youtube.com/watch?v=GTi71Je1g_I" class="video-link" target="_blank">Watch Training Video</a>
+          </div>
+        </div>
+
+        <div class="tip-card" data-categories="dogs cats anxiety">
+          <div class="tip-image">
+            <img src="https://petwow.com/wp-content/uploads/2022/07/PetWow-Blog-Graphics.png" alt="Pet anxiety">
+          </div>
+          <div class="tip-content">
+            <h4>Separation Anxiety</h4>
+            <p>Helping pets cope with being alone</p>
+            <ul>
+              <li>Gradually increase alone time starting with short periods</li>
+              <li>Leave comforting items with your scent</li>
+              <li>Use calming sounds or pheromone diffusers</li>
+              <li>Create a safe, comfortable space for your pet</li>
+            </ul>
+            <a href="https://www.youtube.com/watch?v=V2wjZDygT0M" class="video-link" target="_blank">Watch Training Video</a>
+          </div>
+        </div>
+
+        <div class="tip-card" data-categories="cats training">
+          <div class="tip-image">
+            <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=600&q=80" alt="Cat training">
+          </div>
+          <div class="tip-content">
+            <h4>Litter Box Problems</h4>
+            <p>Addressing common litter box issues</p>
+            <ul>
+              <li>Keep the litter box extremely clean</li>
+              <li>Try different types of litter and boxes</li>
+              <li>Ensure the box is in a quiet, accessible location</li>
+              <li>Rule out medical issues with a vet visit</li>
+            </ul>
+            <a href="https://www.youtube.com/watch?v=03XSrxEGPYs" class="video-link" target="_blank">Watch Training Video</a>
+          </div>
+        </div>
+
+        <div class="tip-card" data-categories="dogs training">
+          <div class="tip-image">
+            <img src="https://images.saymedia-content.com/.image/t_share/MTc0MjQ3MDg5NzU1MTM3NTMy/how-to-train-a-dog-to-heel-without-pulling-on-the-leash.jpg" alt="Dog leash training">
+          </div>
+          <div class="tip-content">
+            <h4>Leash Pulling</h4>
+            <p>Teaching your dog to walk politely on leash</p>
+            <ul>
+              <li>Stop moving when your dog pulls</li>
+              <li>Reward your dog for staying by your side</li>
+              <li>Use front-clip harnesses for better control</li>
+              <li>Be consistent with your training approach</li>
+            </ul>
+            <a href="https://www.youtube.com/watch?v=OwN0Ub3TWsk" class="video-link" target="_blank">Watch Training Video</a>
+          </div>
+        </div>
+
+        <div class="tip-card" data-categories="cats training">
+          <div class="tip-image">
+            <img src="https://d.newsweek.com/en/full/2004342/cat-scratching-sofa.jpg" alt="Cat scratching">
+          </div>
+          <div class="tip-content">
+            <h4>Scratching Furniture</h4>
+            <p>Redirecting scratching behavior</p>
+            <ul>
+              <li>Provide appropriate scratching posts and pads</li>
+              <li>Use catnip to attract your cat to scratching posts</li>
+              <li>Apply double-sided tape to furniture edges</li>
+              <li>Trim your cat's nails regularly</li>
+            </ul>
+            <a href="https://www.youtube.com/watch?v=h5tMfX1fP88" class="video-link" target="_blank">Watch Training Video</a>
+          </div>
+        </div>
+
+        <div class="tip-card" data-categories="dogs training">
+          <div class="tip-image">
+            <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=600&q=80" alt="Dog socialization">
+          </div>
+          <div class="tip-content">
+            <h4>Socialization Issues</h4>
+            <p>Helping your dog interact positively with others</p>
+            <ul>
+              <li>Expose your dog gradually to new experiences</li>
+              <li>Use positive reinforcement for calm behavior</li>
+              <li>Respect your dog's comfort zone</li>
+              <li>Consider professional help for serious fear or aggression</li>
+            </ul>
+            <a href="https://www.youtube.com/watch?v=2N_LvNj2Nck" class="video-link" target="_blank">Watch Training Video</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Additional Resources -->
+    <section class="resources-section">
+      <h3>Additional Resources</h3>
+      <div class="resources-grid">
+        <div class="resource-item" data-target="guides">
+          <div class="resource-icon"><i class="fas fa-book"></i></div>
+          <div><h4>Training Guides</h4><p>Step-by-step instructions</p></div>
+        </div>
+        <ul id="guides" class="resource-content hidden">
+          <li><a href="https://www.akc.org/expert-advice/training/" target="_blank">AKC Training Guides</a></li>
+          <li><a href="https://www.humanesociety.org/resources/how-training-your-pet" target="_blank">Humane Society Training Handbook</a></li>
+          <li><a href="https://www.aspca.org/pet-care/dog-care/common-dog-behavior-issues" target="_blank">ASPCA Behavior Issues Guide</a></li>
+        </ul>
+
+        <div class="resource-item" data-target="videos">
+          <div class="resource-icon"><i class="fas fa-video"></i></div>
+          <div><h4>Video Tutorials</h4><p>Visual learning resources</p></div>
+        </div>
+        <ul id="videos" class="resource-content hidden">
+          <li><a href="https://www.youtube.com/watch?v=jFMA5ggFsXU" target="_blank">Basic Dog Training</a></li>
+          <li><a href="https://www.youtube.com/user/kikopup" target="_blank">Kikopup Training Videos</a></li>
+          <li><a href="https://www.youtube.com/watch?v=yM3n2mWZqUU" target="_blank">How To Train Your Cat Basics</a></li>
+        </ul>
+
+        <div class="resource-item" data-target="advice">
+          <div class="resource-icon"><i class="fas fa-user-md"></i></div>
+          <div><h4>Expert Advice</h4><p>Professional tips</p></div>
+        </div>
+        <ul id="advice" class="resource-content hidden">
+          <li><a href="https://www.petmd.com/dog/behavior" target="_blank">PetMD Behavior Resources</a></li>
+          <li><a href="https://www.whole-dog-journal.com/behavior/" target="_blank">Whole Dog Journal</a></li>
+          <li><a href="https://fearfreehappyhomes.com/" target="_blank">Fear Free Happy Homes</a></li>
+        </ul>
+
+        <div class="resource-item" data-target="forum">
+          <div class="resource-icon"><i class="fas fa-comments"></i></div>
+          <div><h4>Community Forum</h4><p>Connect with other owners</p></div>
+        </div>
+        <ul id="forum" class="resource-content hidden">
+          <li><a href="https://pawcommunity.in/" target="_blank">Pawcommunity</a></li>
+          <li><a href="https://thepack.in/community" target="_blank">Pet Parents Community</a></li>
+          <li><a href="https://www.petzcareindia.com/pet-forum-india" target="_blank">Pet Forums India</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+  <!-- ===== FAQ Section ===== -->
+<section class="faq-section">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-container">
+
+    <div class="faq-item">
+      <button class="faq-question">1. Why does my dog bark so much?</button>
+      <div class="faq-answer">Dogs bark to communicate — it could be excitement, fear, attention-seeking, or boredom. Try identifying the trigger.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">2. How can I stop my cat from scratching furniture?</button>
+      <div class="faq-answer">Provide scratching posts, use double-sided tape on furniture, and reward when your cat uses the post.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">3. What’s the best way to train a puppy?</button>
+      <div class="faq-answer">Use positive reinforcement, short training sessions, and consistency. Avoid punishment.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">4. Why is my pet anxious when I leave?</button>
+      <div class="faq-answer">It’s separation anxiety. Start with short absences, leave toys, and gradually increase the time.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">5. How do I know if my pet is sick?</button>
+      <div class="faq-answer">Look for loss of appetite, lethargy, vomiting, unusual behavior, or sudden aggression. Visit a vet immediately if concerned.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">6. How often should I walk my dog?</button>
+      <div class="faq-answer">Most dogs need at least 30–60 minutes of exercise daily, depending on breed and age.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">7. Can pets eat human food?</button>
+      <div class="faq-answer">Some are safe (plain rice, carrots, chicken), but avoid chocolate, grapes, onions, and spicy food.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">8. Why does my cat hide a lot?</button>
+      <div class="faq-answer">Hiding can mean stress, illness, or simply needing alone time. Provide safe hiding spots but monitor for changes.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">9. How do I introduce a new pet to my home?</button>
+      <div class="faq-answer">Introduce gradually, use separate spaces at first, and reward calm behavior from both pets.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">10. Why does my dog chew on everything?</button>
+      <div class="faq-answer">Chewing relieves stress and boredom. Provide chew toys and discourage chewing on furniture by redirecting.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">11. How do I calm a hyperactive pet?</button>
+      <div class="faq-answer">Give regular exercise, mental stimulation (puzzle toys), and training sessions to channel energy positively.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">12. Why is my cat not using the litter box?</button>
+      <div class="faq-answer">Reasons include dirty litter, stress, medical issues, or location. Clean regularly and consult a vet if it persists.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">13. Can pets get depressed?</button>
+      <div class="faq-answer">Yes, pets can show sadness — loss of appetite, low activity, or withdrawal. Offer love, play, and consult a vet.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">14. Why does my pet lick me so much?</button>
+      <div class="faq-answer">Licking is a sign of affection, bonding, or even stress. Redirect if it becomes excessive.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">15. What’s the best way to stop aggressive behavior?</button>
+      <div class="faq-answer">Never punish. Identify triggers, use training, and consult a vet or behaviorist for severe cases.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">16. Why does my pet shed so much?</button>
+      <div class="faq-answer">Shedding is natural but varies by breed. Regular brushing reduces loose hair.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">17. Should I crate train my dog?</button>
+      <div class="faq-answer">Yes, if done correctly. A crate can be a safe space, not a punishment. Always introduce it positively.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">18. How do I make car rides less stressful?</button>
+      <div class="faq-answer">Start with short rides, bring familiar blankets/toys, and avoid feeding right before travel.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">19. Why does my cat meow at night?</button>
+      <div class="faq-answer">Cats are nocturnal. Provide playtime in the evening and ensure food/water before bedtime.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">20. How can I help my pet adjust to a new home?</button>
+      <div class="faq-answer">Give them time, maintain routine, and provide comfort items like toys or blankets from their old space.</div>
+    </div>
+
+  </div>
+</section>
+
+
+  <footer>
+    <p>© 2025 PawConnect Hub | Built with ❤️ for animals</p>
+  </footer>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const searchInput = document.querySelector("#tipSearch");
+  const tips = document.querySelectorAll(".tip-card");
+  const filterButtons = document.querySelectorAll(".filter-btn");
+
+  // Live search in tips
+  if (searchInput) {
+    searchInput.addEventListener("keyup", () => {
+      const filter = searchInput.value.toLowerCase();
+      tips.forEach(tip => {
+        const text = tip.innerText.toLowerCase();
+        tip.style.display = text.includes(filter) ? "block" : "none";
+      });
+    });
+  }
+
+  // Category filtering
+  filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const category = button.getAttribute("data-category");
+      
+      // Update active button
+      filterButtons.forEach(btn => btn.classList.remove("active"));
+      button.classList.add("active");
+      
+      // Filter tips
+      tips.forEach(tip => {
+        const categories = tip.getAttribute("data-categories");
+        tip.style.display = (category === "all" || categories.includes(category)) ? "block" : "none";
+      });
+    });
+  });
+
+  // Toggle resources content
+  document.querySelectorAll(".resource-item").forEach(item => {
+    item.addEventListener("click", () => {
+      const targetId = item.getAttribute("data-target");
+      const content = document.getElementById(targetId);
+      
+      // Close all other open resources
+      document.querySelectorAll(".resource-content").forEach(el => {
+        if (el.id !== targetId) el.classList.remove("show");
+      });
+      
+      // Toggle current resource
+      content.classList.toggle("show");
+    });
+  });
+
+  // ===== FAQ Toggle =====
+  document.querySelectorAll(".faq-question").forEach(button => {
+    button.addEventListener("click", () => {
+      const item = button.closest(".faq-item");
+      item.classList.toggle("active");
+    });
+  });
+
+});
+</script>
+
+</body>
+</html>
+

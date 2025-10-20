@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawConnect | Support Animal Welfare</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        header {
+  background: linear-gradient(90deg, #4e54c8, #8f94fb);
+  padding: 15px 0;
+  text-align: center;
+  color: white;
+}
+
+.logo h1 {
+  color: white;
+    font-size: 28px;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Scrolling tagline */
+.tagline-container {
+  overflow: hidden;
+  max-width: 100%;
+  margin: 5px auto 15px;
+}
+
+.scrolling-tagline {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scrollText 12s linear infinite;
+  font-size: 1rem;
+  color: #f1f1f1;
+}
+
+@keyframes scrollText {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Navigation */
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+    
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    h2 {
+      font-size: 2.5rem;
+      color: #122cf0;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    main > p {
+      font-size: 1.2rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      color: #666;
+    }
+        /* Your existing CSS remains the same */
+        :root {
+            --primary: #4e89e8;
+            --secondary: #5d5fef;
+            --accent: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #2d3436;
+            --success: #00b894;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, #4e89e8, #5d5fef);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(120deg, #f5f7fa, #e4e8f0);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .logo-icon {
+            font-size: 2.8rem;
+            color: var(--primary);
+        }
+        
+        .logo-text {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        header h1 {
+            color: var(--secondary);
+            margin-bottom: 15px;
+            font-size: 2.5rem;
+        }
+        
+        header p {
+            color: #666;
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e6e6e6;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .amount-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .amount-option {
+            background: #f8f9fa;
+            border: 2px solid #e6e6e6;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .amount-option:hover {
+            background: #edf2ff;
+            border-color: var(--primary);
+        }
+        
+        .amount-option.selected {
+            background: var(--gradient);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        .btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn i {
+            margin-right: 10px;
+        }
+        
+        .receipt {
+            display: none;
+            text-align: center;
+        }
+        
+        .receipt-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px dashed #e6e6e6;
+        }
+        
+        .receipt-header h2 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .receipt-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+        
+        .receipt-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .detail-item {
+            text-align: left;
+            padding: 15px;
+            background: #f9fafc;
+            border-radius: var(--border-radius);
+        }
+        
+        .detail-item .label {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+        
+        .detail-item .value {
+            font-size: 18px;
+        }
+        
+        .amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 20px 0;
+        }
+        
+        .receipt-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #e6e6e6;
+            color: #666;
+        }
+        
+        .print-btn {
+            background: var(--secondary);
+            margin-top: 20px;
+            width: auto;
+            padding: 12px 24px;
+        }
+        
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .share-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .facebook {
+            background: #3b5998;
+        }
+        
+        .twitter {
+            background: #1da1f2;
+        }
+        
+        .whatsapp {
+            background: #25d366;
+        }
+        
+        .payment-status {
+            text-align: center;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 600;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .donation-causes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .cause-option {
+            background: #f8f9fa;
+            border: 2px solid #e6e6e6;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .cause-option:hover {
+            background: #edf2ff;
+            border-color: var(--primary);
+        }
+        
+        .cause-option.selected {
+            background: var(--gradient);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        .cause-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .cause-option.selected .cause-icon {
+            color: white;
+        }
+        
+        /* QR Code Payment Styles */
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .payment-tabs {
+            display: flex;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            background: #f8f9fa;
+            border: 1px solid #e6e6e6;
+        }
+        
+        .payment-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .payment-tab.active {
+            background: var(--gradient);
+            color: white;
+        }
+        
+        .payment-content {
+            display: none;
+            padding: 20px;
+            background: #f9fafc;
+            border-radius: var(--border-radius);
+            border: 1px solid #e6e6e6;
+        }
+        
+        .payment-content.active {
+            display: block;
+        }
+        
+        .qr-code-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .qr-code img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .qr-instructions {
+            text-align: center;
+            max-width: 400px;
+        }
+        
+        .qr-instructions ol {
+            text-align: left;
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        
+        .qr-instructions li {
+            margin-bottom: 10px;
+        }
+        
+        .upi-id {
+            background: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 18px;
+            letter-spacing: 1px;
+            border: 2px dashed var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .upi-id i {
+            color: var(--primary);
+        }
+        
+        .payment-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .payment-actions .btn {
+            flex: 1;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .receipt-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .amount-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .logo {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .payment-tabs {
+                flex-direction: column;
+            }
+            
+            .payment-actions {
+                flex-direction: column;
+            }
+        }
+        
+        /* Print styles to ensure receipt fits on one page */
+        @media print {
+            body, html {
+                height: auto;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body * {
+                visibility: hidden;
+            }
+            
+            .receipt, .receipt * {
+                visibility: visible;
+            }
+            
+            .receipt {
+                display: block;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+                padding: 15px;
+                margin: 0;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .receipt-header {
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+            }
+            
+            .receipt-details {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+            
+            .detail-item {
+                padding: 10px;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            
+            .amount {
+                font-size: 2rem;
+                margin: 10px 0;
+            }
+            
+            .receipt-footer {
+                margin-top: 15px;
+                padding-top: 10px;
+            }
+            
+            .receipt-icon {
+                font-size: 3rem;
+                margin-bottom: 10px;
+            }
+            
+            /* Ensure no element causes a page break */
+            .receipt > * {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+        }
+        
+        .paw-print {
+            position: absolute;
+            opacity: 0.03;
+            font-size: 3rem;
+            color: var(--dark);
+            z-index: -1;
+        }
+        
+        .paw-1 {
+            top: 10%;
+            left: 5%;
+            transform: rotate(25deg);
+        }
+        
+        .paw-2 {
+            top: 15%;
+            right: 7%;
+            transform: rotate(-15deg);
+        }
+        
+        .paw-3 {
+            bottom: 20%;
+            left: 8%;
+            transform: rotate(-10deg);
+        }
+        
+        .paw-4 {
+            bottom: 15%;
+            right: 10%;
+            transform: rotate(20deg);
+        }
+    </style>
+</head>
+<body>
+     <header>
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+      <h1>PawConnect Hub</h1>
+      
+      <!-- Scrolling tagline under logo -->
+      <div class="tagline-container">
+        <p class="scrolling-tagline">Connecting hearts and paws, spreading love, care, and hope everywhere.</p>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+                <ul>
+                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="health.html"><i class="fas fa-heartbeat"></i> Pet Health</a></li>
+                    <li><a href="vets.html"><i class="fas fa-stethoscope"></i> Vet Listings</a></li>
+                    <li><a href="ngos.html"><i class="fas fa-hands-helping"></i> NGOs</a></li>
+                    <li><a href="rescue.html"><i class="fas fa-life-ring"></i> Rescue</a></li>
+                    <li><a href="lostfound.html"><i class="fas fa-search"></i> Lost & Found</a></li>
+                    <li><a href="adoption.html"><i class="fas fa-paw"></i> Adoption</a></li>
+                    <li><a href="emergency.html"><i class="fas fa-bell"></i> Emergency Alerts</a></li>
+                    <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+                    <li><a href="behaviour.html"><i class="fas fa-brain"></i> Pet Behavior</a></li>
+                    <li><a href="donations.html"><i class="fa-solid fa-coins"></i>Donations</a></li>
+                </ul>
+            </nav>
+  </div>
+</header>
+    <div class="paw-print paw-1">🐾</div>
+    <div class="paw-print paw-2">🐾</div>
+    <div class="paw-print paw-3">🐾</div>
+    <div class="paw-print paw-4">🐾</div>
+
+   
+    
+    <div class="container">
+     
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-paw"></i></div>
+                <div class="logo-text">PawConnect</div>
+            </div>
+            <h1>Help Animals in Need</h1>
+            <p>Your donation helps us provide food, shelter, and medical care to abandoned and injured animals. Every contribution makes a difference.</p>
+       
+        
+        <div id="payment-status" class="payment-status"></div>
+        
+        <div class="card no-print">
+            <h2><i class="fas fa-paw"></i> Donation Details</h2>
+            <div class="form-group">
+                <label for="amount">Donation Amount (₹)</label>
+                <div class="amount-options">
+                    <div class="amount-option" data-amount="500">₹500</div>
+                    <div class="amount-option" data-amount="1000">₹1000</div>
+                    <div class="amount-option" data-amount="2000">₹2000</div>
+                    <div class="amount-option" data-amount="5000">₹5000</div>
+                    <div class="amount-option" data-amount="10000">₹10,000</div>
+                    <div class="amount-option" data-amount="other">Other</div>
+                </div>
+                <input type="number" id="amount" placeholder="Enter custom amount" min="1" style="display: none;">
+            </div>
+            
+            <div class="form-group">
+                <label>What would you like to support?</label>
+                <div class="donation-causes">
+                    <div class="cause-option" data-cause="rescue">
+                        <div class="cause-icon"><i class="fas fa-ambulance"></i></div>
+                        <div>Animal Rescue</div>
+                    </div>
+                    <div class="cause-option" data-cause="medical">
+                        <div class="cause-icon"><i class="fas fa-first-aid"></i></div>
+                        <div>Medical Care</div>
+                    </div>
+                    <div class="cause-option" data-cause="shelter">
+                        <div class="cause-icon"><i class="fas fa-home"></i></div>
+                        <div>Shelter Support</div>
+                    </div>
+                    <div class="cause-option" data-cause="food">
+                        <div class="cause-icon"><i class="fas fa-bone"></i></div>
+                        <div>Food & Nutrition</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="contact">Phone Number</label>
+                <input type="tel" id="contact" placeholder="Enter your phone number">
+            </div>
+            
+            <!-- QR Code Payment Section -->
+            <div class="form-group">
+                <label>Payment Method</label>
+                <div class="payment-methods">
+                    <div class="payment-tabs">
+                        <div class="payment-tab active" data-tab="card">Card Payment</div>
+                        <div class="payment-tab" data-tab="qr">QR Code / UPI</div>
+                    </div>
+                    
+                    <div class="payment-content active" id="card-payment">
+                        <p>Pay securely using your credit or debit card. Your payment information is encrypted and secure.</p>
+                    </div>
+                    
+                    <div class="payment-content" id="qr-payment">
+                        <div class="qr-code-container">
+                            <div class="qr-code">
+                                <!-- QR Code will be generated here -->
+                                <div id="qr-code-placeholder">QR Code will appear here after entering amount</div>
+                            </div>
+                            
+                            <div class="upi-id">
+                                <i class="fas fa-qrcode"></i>
+                                <span id="upi-display">pawconnect@upi</span>
+                            </div>
+                            
+                            <div class="qr-instructions">
+                                <h4>How to pay with QR Code:</h4>
+                                <ol>
+                                    <li>Open your UPI payment app (Google Pay, PhonePe, Paytm, etc.)</li>
+                                    <li>Tap on "Scan QR Code"</li>
+                                    <li>Scan the QR code above</li>
+                                    <li>Enter the donation amount and complete the payment</li>
+                                </ol>
+                                <p>Or use the UPI ID above to send payment directly</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Processing your donation...</p>
+            </div>
+            
+            <div class="payment-actions">
+                <button id="donate-btn" class="btn"><i class="fas fa-credit-card"></i> Pay with Card</button>
+                <button id="qr-donate-btn" class="btn btn-secondary"><i class="fas fa-qrcode"></i> Pay with QR</button>
+            </div>
+        </div>
+        
+        <div id="receipt" class="card receipt">
+            <div class="receipt-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="receipt-header">
+                <div class="logo" style="margin-bottom: 10px;">
+                    <div class="logo-icon"><i class="fas fa-paw"></i></div>
+                    <div class="logo-text">PawConnect</div>
+                </div>
+                <h2>Donation Receipt</h2>
+                <p>Thank you for your generous support!</p>
+            </div>
+            
+            <div class="amount" id="receipt-amount">₹500</div>
+            
+            <div class="receipt-details">
+                <div class="detail-item">
+                    <div class="label">Receipt ID</div>
+                    <div class="value" id="receipt-id">PC-2023-0088</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Date & Time</div>
+                    <div class="value" id="payment-date">Sep 21, 2023 14:30 PM</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Donor Name</div>
+                    <div class="value" id="receipt-name">John Doe</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Email</div>
+                    <div class="value" id="receipt-email">john@example.com</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Phone</div>
+                    <div class="value" id="receipt-contact">9876543210</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Supported Cause</div>
+                    <div class="value" id="receipt-cause">Animal Rescue</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Payment Method</div>
+                    <div class="value" id="payment-method">Credit Card</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Status</div>
+                    <div class="value" id="payment-status-text">Success</div>
+                </div>
+            </div>
+            
+            <div class="receipt-footer">
+                <p>Your donation is tax deductible under Section 80G of the Income Tax Act.</p>
+                <p>This is a computer-generated receipt. No signature is required.</p>
+                
+                <div class="share-buttons">
+                    <a href="#" class="share-btn facebook" title="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="share-btn twitter" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="share-btn whatsapp" title="Share on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+                
+                <button class="btn print-btn no-print" onclick="window.print()"><i class="fas fa-print"></i> Print Receipt</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Generation Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    
+   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Amount selection logic
+        const amountOptions = document.querySelectorAll('.amount-option');
+        const amountInput = document.getElementById('amount');
+        
+        amountOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                amountOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                if (this.dataset.amount === 'other') {
+                    amountInput.style.display = 'block';
+                    amountInput.focus();
+                } else {
+                    amountInput.style.display = 'none';
+                    amountInput.value = this.dataset.amount;
+                }
+            });
+        });
+        
+        // Cause selection logic
+        const causeOptions = document.querySelectorAll('.cause-option');
+        let selectedCause = 'rescue'; // Default
+        
+        causeOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                causeOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedCause = this.dataset.cause;
+            });
+        });
+        
+        // Set first cause as selected by default
+        causeOptions[0].classList.add('selected');
+        
+        // Payment tabs logic
+        const paymentTabs = document.querySelectorAll('.payment-tab');
+        const paymentContents = document.querySelectorAll('.payment-content');
+        
+        paymentTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.dataset.tab;
+                
+                // Update active tab
+                paymentTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding content
+                paymentContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === tabId + '-payment') {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+        
+        // Card payment button logic
+        document.getElementById('donate-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            processDonation('card');
+        });
+        
+        // QR payment button logic
+        document.getElementById('qr-donate-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            processDonation('qr');
+        });
+        
+        async function processDonation(paymentMethod) {
+            const amount = document.getElementById('amount').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const contact = document.getElementById('contact').value;
+            const cause = getCauseName(selectedCause);
+            
+            if (!amount || amount < 1) {
+                showStatus('Please enter a valid donation amount', 'error');
+                return;
+            }
+            
+            if (!name || !email || !contact) {
+                showStatus('Please fill all the fields', 'error');
+                return;
+            }
+            
+            // Show loading
+            document.querySelector('.loading').style.display = 'block';
+            
+            try {
+                // Send donation data to backend
+                const response = await fetch('/api/donations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: parseFloat(amount),
+                        cause: cause,
+                        donor_name: name,
+                        donor_email: email,
+                        donor_phone: contact,
+                        payment_method: paymentMethod === 'card' ? 'Credit/Debit Card' : 'QR Code/UPI'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showStatus(`Donation recorded successfully! Thank you for your support.`, 'success');
+                    
+                    // Generate receipt
+                    generateReceipt({
+                        amount: amount,
+                        name: name,
+                        email: email,
+                        contact: contact,
+                        cause: selectedCause,
+                        paymentMethod: paymentMethod,
+                        receiptId: result.receiptId,
+                        timestamp: result.timestamp
+                    });
+                } else {
+                    throw new Error(result.error || 'Failed to record donation');
+                }
+            } catch (error) {
+                console.error('Donation error:', error);
+                showStatus(`Error: ${error.message}`, 'error');
+            } finally {
+                // Hide loading
+                document.querySelector('.loading').style.display = 'none';
+            }
+        }
+        
+        function generateReceipt(donationData) {
+            // Fill receipt details
+            document.getElementById('receipt-id').textContent = donationData.receiptId || 'PC-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('payment-date').textContent = donationData.timestamp ? new Date(donationData.timestamp).toLocaleString() : new Date().toLocaleString();
+            document.getElementById('receipt-name').textContent = donationData.name;
+            document.getElementById('receipt-email').textContent = donationData.email;
+            document.getElementById('receipt-contact').textContent = donationData.contact;
+            document.getElementById('receipt-amount').textContent = '₹' + donationData.amount;
+            document.getElementById('receipt-cause').textContent = getCauseName(donationData.cause);
+            document.getElementById('payment-method').textContent = donationData.paymentMethod === 'card' ? 'Credit/Debit Card' : 'QR Code/UPI';
+            document.getElementById('payment-status-text').textContent = 'Recorded';
+            
+            // Setup share buttons
+            const shareText = `I'm supporting PawConnect with a donation of ₹${donationData.amount} for ${getCauseName(donationData.cause)}. Join me in helping animals in need!`;
+            const shareUrl = window.location.href;
+            
+            document.querySelector('.facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+            document.querySelector('.twitter').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+            document.querySelector('.whatsapp').href = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
+            
+            // Show receipt
+            document.getElementById('receipt').style.display = 'block';
+            
+            // Scroll to receipt
+            document.getElementById('receipt').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function getCauseName(causeKey) {
+            const causes = {
+                'rescue': 'Animal Rescue',
+                'medical': 'Medical Care',
+                'shelter': 'Shelter Support',
+                'food': 'Food & Nutrition'
+            };
+            return causes[causeKey] || 'General Donation';
+        }
+        
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('payment-status');
+            statusEl.textContent = message;
+            statusEl.className = 'payment-status ' + type;
+            statusEl.style.display = 'block';
+            
+            // Hide status after 5 seconds
+            setTimeout(function() {
+                statusEl.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Set default amount option
+        amountOptions[0].click();
+        
+        // Remove QR code generation since we're not processing real payments
+        document.getElementById('qr-code-placeholder').innerHTML = '<p>Thank you for your donation!</p>';
+        document.getElementById('upi-display').textContent = 'pawconnect@example';
+    });
+</script>
+</body>
+</html>

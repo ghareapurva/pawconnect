@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawConnect Hub - Adoption & Foster Care</title>
+    <link rel="stylesheet" href="adoption.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+      <h1>PawConnect Hub</h1>
+      
+      <!-- Scrolling tagline under logo -->
+      <div class="tagline-container">
+        <p class="scrolling-tagline">Connecting hearts and paws, spreading love, care, and hope everywhere.</p>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+   <nav>
+                <ul>
+                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="health.html"><i class="fas fa-heartbeat"></i> Pet Health</a></li>
+                    <li><a href="vets.html"><i class="fas fa-stethoscope"></i> Vet Listings</a></li>
+                    <li><a href="ngos.html"><i class="fas fa-hands-helping"></i> NGOs</a></li>
+                    <li><a href="rescue.html"><i class="fas fa-life-ring"></i> Rescue</a></li>
+                    <li><a href="lostfound.html"><i class="fas fa-search"></i> Lost & Found</a></li>
+                    <li><a href="adoption.html"><i class="fas fa-paw"></i> Adoption</a></li>
+                    <li><a href="emergency.html"><i class="fas fa-bell"></i> Emergency Alerts</a></li>
+                    <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+                    <li><a href="behaviour.html"><i class="fas fa-brain"></i> Pet Behavior</a></li>
+                    <li><a href="donations.html"><i class="fa-solid fa-coins"></i>Donations</a></li>
+                </ul>
+            </nav>
+  </div>
+</header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Find Your Furry Forever Friend</h2>
+                <p>Browse pets looking for a loving home, or add pets available for adoption or foster care.</p>
+                <button class="cta-button" id="scrollToForm">Add a Pet Listing</button>
+            </div>
+            <div class="hero-image">
+                <img src="https://fthmb.tqn.com/LeMyO5bp8Nzf82rYTL7HhQXYsiU=/3863x2578/filters:fill(auto,1)/adopting-a-family-pet-from-the-pound-499343154-58756e615f9b584db32de4f3.jpg" alt="Cute pets illustration">
+            </div>
+        </section>
+
+        <section class="intro">
+            <div class="container">
+                <h2>Adoption & Foster Care</h2>
+                <p>Give a homeless pet a second chance at happiness. Browse our available pets or list one for adoption.</p>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <div class="container">
+                <h3><i class="fas fa-plus-circle"></i> Add a Pet for Adoption / Foster</h3>
+                <div id="formMessage"></div>
+                <form id="adoptionForm" method="POST" enctype="multipart/form-data">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="petName">Pet Name:</label>
+                            <input type="text" id="petName" name="petName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="animalType">Animal Type:</label>
+                            <select id="animalType" name="animalType" required>
+                                <option value="">Select Type</option>
+                                <option value="Dog">Dog</option>
+                                <option value="Cat">Cat</option>
+                                <option value="Bird">Bird</option>
+                                <option value="Rabbit">Rabbit</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="breed">Breed:</label>
+                            <input type="text" id="breed" name="breed" placeholder="e.g. Golden Retriever">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="age">Age:</label>
+                            <select id="age" name="age">
+                                <option value="">Select Age</option>
+                                <option value="Puppy/Kitten">Puppy/Kitten (0-1 year)</option>
+                                <option value="Young">Young (1-3 years)</option>
+                                <option value="Adult">Adult (3-8 years)</option>
+                                <option value="Senior">Senior (8+ years)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gender">Gender:</label>
+                            <select id="gender" name="gender">
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Pet Photo:</label>
+                            <div class="upload-area" id="uploadArea">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Drag & drop your image here or click to browse</p>
+                                <button type="button" class="upload-btn">Select Image</button>
+                                <input type="file" id="petImage" name="petImage" accept="image/*" style="display: none;">
+                                <div id="fileName"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <div class="image-preview">
+                                <img id="previewImg" src="" alt="Image preview">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="description">Description/Temperament:</label>
+                            <textarea id="description" name="description" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact">Contact Info:</label>
+                            <input type="text" id="contact" name="contact" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <button type="submit" class="submit-btn">
+                                <i class="fas fa-paper-plane"></i> Add Listing
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="adoption-list">
+            <div class="container">
+                <h3><i class="fas fa-paw"></i> Available for Adoption / Foster</h3>
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchPets" placeholder="Search pets by name, type, or breed...">
+                </div>
+                <div class="pet-grid"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 PawConnect Hub | Bringing Paws & Hearts Together <i class="fas fa-paw"></i></p>
+        </div>
+    </footer>
+
+    <script src="adoption.js"></script>
+</body>
+</html>

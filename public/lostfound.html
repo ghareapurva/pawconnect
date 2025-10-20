@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PawConnect Hub - Lost & Found Pets</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+   header {
+  background: linear-gradient(90deg, #4e54c8, #8f94fb);
+  padding: 15px 0;
+  text-align: center;
+  color: white;
+}
+
+.logo h1 {
+  font-size: 28px;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Scrolling tagline */
+.tagline-container {
+  overflow: hidden;
+  max-width: 100%;
+  margin: 5px auto 15px;
+}
+
+.scrolling-tagline {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scrollText 12s linear infinite;
+  font-size: 1rem;
+  color: #f1f1f1;
+}
+
+@keyframes scrollText {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Navigation */
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+    
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    h2 {
+      font-size: 2.5rem;
+      color: #2575fc;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    main > p {
+      font-size: 1.2rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      color: #666;
+    }
+   * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    header {
+      background: linear-gradient(90deg, #4e54c8, #8f94fb);
+      color: white;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    header h1 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+    
+    nav ul {
+      display: flex;
+      list-style: none;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    
+    nav a:hover, nav a.active {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    h2 {
+      font-size: 2.5rem;
+      color: #2575fc;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    main > p {
+      font-size: 1.2rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      color: #666;
+    }
+    
+    /* Form Styles */
+    .lostfound-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 3rem;
+    }
+    
+    #lostFoundForm {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    #lostFoundForm label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #444;
+    }
+    
+    #lostFoundForm input,
+    #lostFoundForm textarea,
+    #lostFoundForm select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    
+    #lostFoundForm textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    #lostFoundForm button {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 4px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 1rem;
+    }
+    
+    #lostFoundForm button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Image Upload */
+    .image-upload {
+      margin-bottom: 1rem;
+    }
+    
+    .upload-area {
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.3s, background-color 0.3s;
+    }
+    
+    .upload-area:hover {
+      border-color: #2575fc;
+      background-color: #f0f8ff;
+    }
+    
+    .upload-area i {
+      font-size: 2.5rem;
+      color: #2575fc;
+      margin-bottom: 1rem;
+    }
+    
+    .upload-area p {
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    
+    .upload-btn {
+      background: #2575fc;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .upload-btn:hover {
+      background: #1c64d4;
+    }
+    
+    #fileName {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .image-preview {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    
+    .image-preview img {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+    
+    /* Reports List */
+    .lostfound-list {
+      margin-bottom: 3rem;
+    }
+    
+    .lostfound-list h3 {
+      font-size: 1.8rem;
+      color: #2575fc;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .reports-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+    
+    .report-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+    
+    .report-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .report-image {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .report-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .report-content {
+      padding: 1.5rem;
+    }
+    
+    .report-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .report-status {
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    
+    .status-lost {
+      background: #ffe0e0;
+      color: #e53935;
+    }
+    
+    .status-found {
+      background: #e0f0ff;
+      color: #1976d2;
+    }
+    
+    .report-date {
+      color: #999;
+      font-size: 0.9rem;
+    }
+    
+    .report-title {
+      font-size: 1.3rem;
+      color: #6a11cb;
+      margin-bottom: 0.5rem;
+    }
+    
+    .report-detail {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      color: #555;
+    }
+    
+    .report-detail i {
+      color: #2575fc;
+      min-width: 20px;
+    }
+    
+    .report-description {
+      color: #666;
+      margin: 1rem 0;
+      line-height: 1.5;
+    }
+    
+    .report-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .contact-btn {
+      background: #2575fc;
+      color: white;
+    }
+    
+    .contact-btn:hover {
+      background: #1c64d4;
+    }
+    
+    .share-btn {
+      background: #f0f8ff;
+      color: #2575fc;
+    }
+    
+    .share-btn:hover {
+      background: #e0f0ff;
+    }
+    
+    .resolved-btn {
+      background: #e8f5e9;
+      color: #388e3c;
+    }
+    
+    .resolved-btn:hover {
+      background: #d7ecd9;
+    }
+    
+    .no-reports {
+      text-align: center;
+      padding: 2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      color: #666;
+      grid-column: 1 / -1;
+    }
+    
+    /* Filter Section */
+    .filter-section {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .filter-group label {
+      font-weight: 600;
+      color: #444;
+    }
+    
+    .filter-group select {
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: white;
+      border-radius: 50px;
+      padding: 0.5rem 1rem;
+      border: 1px solid #ddd;
+      flex: 1;
+      max-width: 300px;
+    }
+    
+    .search-box input {
+      border: none;
+      padding: 0.5rem;
+      outline: none;
+      width: 100%;
+    }
+    
+    /* Tips Section */
+    .tips-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 3rem;
+    }
+    
+    .tips-section h3 {
+      color: #2575fc;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .tip-card {
+      padding: 1.5rem;
+      background: #f0f8ff;
+      border-radius: 8px;
+    }
+    
+    .tip-card h4 {
+      color: #6a11cb;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .tip-card ul {
+      padding-left: 1.2rem;
+      color: #555;
+    }
+    
+    .tip-card li {
+      margin-bottom: 0.5rem;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: #333;
+      color: white;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .reports-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .filter-section {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .search-box {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+      <h1>PawConnect Hub</h1>
+      
+      <!-- Scrolling tagline under logo -->
+      <div class="tagline-container">
+        <p class="scrolling-tagline">Connecting hearts and paws, spreading love, care, and hope everywhere.</p>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+     <nav>
+                <ul>
+                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="health.html"><i class="fas fa-heartbeat"></i> Pet Health</a></li>
+                    <li><a href="vets.html"><i class="fas fa-stethoscope"></i> Vet Listings</a></li>
+                    <li><a href="ngos.html"><i class="fas fa-hands-helping"></i> NGOs</a></li>
+                    <li><a href="rescue.html"><i class="fas fa-life-ring"></i> Rescue</a></li>
+                    <li><a href="lostfound.html"><i class="fas fa-search"></i> Lost & Found</a></li>
+                    <li><a href="adoption.html"><i class="fas fa-paw"></i> Adoption</a></li>
+                    <li><a href="emergency.html"><i class="fas fa-bell"></i> Emergency Alerts</a></li>
+                    <li><a href="community.html"><i class="fas fa-users"></i> Community</a></li>
+                    <li><a href="behaviour.html"><i class="fas fa-brain"></i> Pet Behavior</a></li>
+                    <li><a href="donations.html"><i class="fa-solid fa-coins"></i>Donations</a></li>
+                </ul>
+            </nav>
+  </div>
+</header>
+
+  <main>
+    <section class="lostfound-section">
+      <h2>Lost & Found Pets</h2>
+      <p>Report lost pets or let others know if you've found one. Together, we can reunite them with their families 🐾</p>
+      
+      <form id="lostFoundForm" enctype="multipart/form-data">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="status">Report Type:</label>
+            <select id="status" name="status" required>
+              <option value="">Select type</option>
+              <option value="Lost">Lost Pet</option>
+              <option value="Found">Found Pet</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="petName">Pet Name:</label>
+            <input type="text" id="petName" name="petName" placeholder="If known (optional)">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="animalType">Animal Type:</label>
+            <select id="animalType" name="animalType" required>
+              <option value="">Select animal type</option>
+              <option value="Dog">Dog</option>
+              <option value="Cat">Cat</option>
+              <option value="Bird">Bird</option>
+              <option value="Rabbit">Rabbit</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="breed">Breed (if known):</label>
+            <input type="text" id="breed" name="breed" placeholder="Breed or description">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="location">Location:</label>
+          <input type="text" id="location" name="location" placeholder="Last seen or found at" required>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="color">Primary Color:</label>
+            <input type="text" id="color" name="color" placeholder="Pet's main color">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea id="description" name="description" placeholder="Color, breed, special marks, collar, temperament, etc." required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Upload Photo:</label>
+          <div class="image-upload">
+            <div class="upload-area" id="uploadArea">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>Drag & drop a photo here or click to browse</p>
+              <button type="button" class="upload-btn">Select Image</button>
+              <input type="file" id="petImage" name="petImage" accept="image/*" style="display: none;">
+              <div id="fileName"></div>
+            </div>
+          </div>
+          
+          <div class="image-preview">
+            <img id="previewImg" src="" alt="Pet image preview">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="contact">Your Contact Information:</label>
+            <input type="text" id="contact" name="contact" placeholder="Phone or email" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="reward">Reward Offered (optional):</label>
+            <input type="text" id="reward" name="reward" placeholder="Amount or description">
+          </div>
+        </div>
+        
+        <button type="submit"><i class="fas fa-paper-plane"></i> Submit Report</button>
+      </form>
+    </section>
+
+    <section class="tips-section">
+      <h3><i class="fas fa-lightbulb"></i> What to Do If You've Lost or Found a Pet</h3>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <h4><i class="fas fa-search"></i> If You've Lost a Pet</h4>
+          <ul>
+            <li>Search your neighborhood immediately</li>
+            <li>Notify local animal shelters and veterinarians</li>
+            <li>Create flyers with a clear photo and contact info</li>
+            <li>Post on local social media groups and community boards</li>
+            <li>Leave out familiar items with your scent</li>
+          </ul>
+        </div>
+        
+        <div class="tip-card">
+          <h4><i class="fas fa-home"></i> If You've Found a Pet</h4>
+          <ul>
+            <li>Check for identification tags or microchip</li>
+            <li>Take to a vet to scan for microchip</li>
+            <li>Post found notices in the area</li>
+            <li>Notify local animal shelters</li>
+            <li>Approach carefully - scared animals may behave unpredictably</li>
+          </ul>
+        </div>
+        
+        <div class="tip-card">
+          <h4><i class="fas fa-shield-alt"></i> Prevention Tips</h4>
+          <ul>
+            <li>Ensure your pet always wears a collar with ID tags</li>
+            <li>Microchip your pet and keep registration updated</li>
+            <li>Keep recent photos of your pet</li>
+            <li>Secure your yard with proper fencing</li>
+            <li>Leash your pet during walks</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="filter-section">
+      <div class="filter-group">
+        <label for="filterStatus">Filter by:</label>
+        <select id="filterStatus">
+          <option value="all">All Reports</option>
+          <option value="Lost">Lost Pets</option>
+          <option value="Found">Found Pets</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label for="filterAnimal">Animal:</label>
+        <select id="filterAnimal">
+          <option value="all">All Animals</option>
+          <option value="Dog">Dogs</option>
+          <option value="Cat">Cats</option>
+          <option value="Bird">Birds</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchReports" placeholder="Search reports...">
+      </div>
+    </section>
+
+    <section class="lostfound-list">
+      <h3>Recent Reports</h3>
+      <div class="reports-container" id="reportsList">
+        <div class="no-reports">
+          <i class="fas fa-paw" style="font-size: 3rem; color: #6a11cb; margin-bottom: 1rem;"></i>
+          <p>No reports yet. Be the first to submit a lost or found pet report.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 PawConnect Hub. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.querySelector("#lostFoundForm");
+      const reportsList = document.querySelector("#reportsList");
+      const uploadArea = document.querySelector("#uploadArea");
+      const fileInput = document.querySelector("#petImage");
+      const fileName = document.querySelector("#fileName");
+      const previewImg = document.querySelector("#previewImg");
+      const uploadBtn = document.querySelector(".upload-btn");
+      const searchInput = document.querySelector("#searchReports");
+      const filterStatus = document.querySelector("#filterStatus");
+      const filterAnimal = document.querySelector("#filterAnimal");
+      
+      // Sample reports data (would typically come from a database)
+      const sampleReports = [
+        {
+          id: 1,
+          status: "Lost",
+          petName: "Max",
+          animalType: "Dog",
+          breed: "Golden Retriever",
+          location: "Sector 62, Noida",
+          date: "2023-10-15",
+          color: "Golden",
+          description: "Friendly golden retriever, answers to Max. Wearing a blue collar with phone number tag. Last seen near the park.",
+          image: "https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          contact: "Rahul - 9876543210",
+          reward: "₹5,000",
+          posted: "2 days ago"
+        },
+        {
+          id: 2,
+          status: "Found",
+          petName: "Unknown",
+          animalType: "Cat",
+          breed: "Domestic Shorthair",
+          location: "Indira Nagar, Bangalore",
+          date: "2023-10-14",
+          color: "Black and white",
+          description: "Found this friendly cat near the metro station. No collar but seems well cared for. Please contact if this is your cat.",
+          image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          contact: "Priya - 8765432109",
+          reward: "None",
+          posted: "1 day ago"
+        }
+      ];
+      
+      // Upload area functionality
+      uploadArea.addEventListener('click', () => {
+        fileInput.click();
+      });
+      
+      uploadBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fileInput.click();
+      });
+      
+      // Drag and drop functionality
+      uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#2575fc';
+        uploadArea.style.backgroundColor = '#f0f8ff';
+      });
+      
+      uploadArea.addEventListener('dragleave', () => {
+        uploadArea.style.borderColor = '#ccc';
+        uploadArea.style.backgroundColor = 'transparent';
+      });
+      
+      uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#ccc';
+        uploadArea.style.backgroundColor = 'transparent';
+        
+        if (e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          handleFileSelection(e.dataTransfer.files[0]);
+        }
+      });
+      
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files.length) {
+          handleFileSelection(fileInput.files[0]);
+        }
+      });
+      
+      function handleFileSelection(file) {
+        // Check if file is an image
+        if (!file.type.match('image.*')) {
+          alert('Please select an image file (jpg, png, gif, etc.)');
+          return;
+        }
+        
+        // Check file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          alert('Please select an image smaller than 5MB');
+          return;
+        }
+        
+        // Display file name
+        fileName.textContent = `Selected file: ${file.name}`;
+        
+        // Preview image
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          previewImg.src = e.target.result;
+          previewImg.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+      
+      // Form submission handler
+      if (form) {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          
+          // Create FormData object to handle file upload
+          const formData = new FormData(form);
+          
+          try {
+            const response = await fetch('/api/lostfound', {
+              method: 'POST',
+              body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (response.ok) {
+              // Success - add to local display
+              const report = {
+                id: Date.now(),
+                status: formData.get('status'),
+                petName: formData.get('petName') || "Unknown",
+                animalType: formData.get('animalType'),
+                breed: formData.get('breed') || "Unknown",
+                location: formData.get('location'),
+                date: formData.get('date'),
+                color: formData.get('color') || "Unknown",
+                description: formData.get('description'),
+                image: previewImg.style.display === 'block' ? previewImg.src : "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                contact: formData.get('contact'),
+                reward: formData.get('reward') || "None",
+                posted: "Just now"
+              };
+              
+              // Add to reports array
+              sampleReports.unshift(report);
+              
+              // Re-render reports
+              renderReports(sampleReports);
+              
+              // Clear form
+              form.reset();
+              fileName.textContent = "";
+              previewImg.style.display = "none";
+              
+              // Show success message
+              alert(`${report.status} pet report submitted successfully!`);
+            } else {
+              alert(`Error: ${result.error}`);
+            }
+          } catch (error) {
+            console.error('Error submitting form:', error);
+            alert('Error submitting report. Please try again.');
+          }
+        });
+      }
+      
+      // Function to render reports
+      function renderReports(reportsArray) {
+        reportsList.innerHTML = "";
+        
+        if (reportsArray.length === 0) {
+          reportsList.innerHTML = `
+            <div class="no-reports">
+              <i class="fas fa-paw" style="font-size: 3rem; color: #6a11cb; margin-bottom: 1rem;"></i>
+              <p>No reports found matching your criteria.</p>
+            </div>
+          `;
+          return;
+        }
+        
+        reportsArray.forEach((report) => {
+          const reportCard = document.createElement("article");
+          reportCard.classList.add("report-card");
+          
+          reportCard.innerHTML = `
+            <div class="report-image">
+              <img src="${report.image}" alt="${report.animalType}">
+            </div>
+            <div class="report-content">
+              <div class="report-header">
+                <span class="report-status status-${report.status.toLowerCase()}">${report.status.toUpperCase()}</span>
+                <span class="report-date">${report.posted}</span>
+              </div>
+              
+              <h3 class="report-title">${report.petName} - ${report.breed}</h3>
+              
+              <div class="report-detail">
+                <i class="fas fa-paw"></i>
+                <span>${report.animalType} • ${report.color}</span>
+              </div>
+              
+              <div class="report-detail">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>${report.location}</span>
+              </div>
+              
+              <div class="report-detail">
+                <i class="fas fa-calendar-alt"></i>
+                <span>${report.date}</span>
+              </div>
+              
+              ${report.reward !== "None" ? `
+                <div class="report-detail">
+                  <i class="fas fa-gift"></i>
+                  <span>Reward: ${report.reward}</span>
+                </div>
+              ` : ''}
+              
+              <p class="report-description">${report.description}</p>
+              
+              <div class="report-actions">
+                <button class="action-btn contact-btn">
+                  <i class="fas fa-phone"></i> Contact
+                </button>
+                <button class="action-btn share-btn">
+                  <i class="fas fa-share-alt"></i> Share
+                </button>
+                ${report.status === "Found" ? `
+                  <button class="action-btn resolved-btn">
+                    <i class="fas fa-check"></i> Reunited
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          `;
+          
+          reportsList.appendChild(reportCard);
+          
+          // Add event listeners
+          const contactBtn = reportCard.querySelector(".contact-btn");
+          contactBtn.addEventListener("click", () => {
+            alert(`Contact information: ${report.contact}`);
+          });
+          
+          const shareBtn = reportCard.querySelector(".share-btn");
+          shareBtn.addEventListener("click", () => {
+            alert(`Report shared successfully! Help spread the word to find ${report.petName}.`);
+          });
+          
+          if (report.status === "Found") {
+            const resolvedBtn = reportCard.querySelector(".resolved-btn");
+            resolvedBtn.addEventListener("click", () => {
+              if (confirm("Mark this found pet as reunited with owner?")) {
+                reportCard.remove();
+                alert("Thank you for helping reunite this pet with its family!");
+                
+                // If no reports remain, show placeholder text
+                if (reportsList.children.length === 0) {
+                  reportsList.innerHTML = `
+                    <div class="no-reports">
+                      <i class="fas fa-paw" style="font-size: 3rem; color: #6a11cb; margin-bottom: 1rem;"></i>
+                      <p>No reports found matching your criteria.</p>
+                    </div>
+                  `;
+                }
+              }
+            });
+          }
+        });
+      }
+      
+      // Search functionality
+      searchInput.addEventListener("input", () => {
+        filterReports();
+      });
+      
+      // Filter functionality
+      filterStatus.addEventListener("change", filterReports);
+      filterAnimal.addEventListener("change", filterReports);
+      
+      function filterReports() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const statusFilter = filterStatus.value;
+        const animalFilter = filterAnimal.value;
+        
+        const filteredReports = sampleReports.filter((report) => {
+          const matchesSearch = 
+            report.petName.toLowerCase().includes(searchTerm) ||
+            report.breed.toLowerCase().includes(searchTerm) ||
+            report.location.toLowerCase().includes(searchTerm) ||
+            report.description.toLowerCase().includes(searchTerm);
+          
+          const matchesStatus = statusFilter === "all" || report.status === statusFilter;
+          const matchesAnimal = animalFilter === "all" || report.animalType === animalFilter;
+          
+          return matchesSearch && matchesStatus && matchesAnimal;
+        });
+        
+        renderReports(filteredReports);
+      }
+      
+      // Initialize with sample reports
+      renderReports(sampleReports);
+    });
+  </script>
+</body>
+</html>
