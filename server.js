@@ -13,8 +13,8 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Enhanced static file serving for Render
-app.use(express.static(__dirname)); // Serve everything from root directory
+// Enhanced static file serving for Render - SERVE FROM PUBLIC FOLDER
+app.use(express.static(path.join(__dirname, 'public'))); // Serve from public folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Session middleware
@@ -232,46 +232,49 @@ app.get('/auth/status', (req, res) => {
     }
 });
 
-// ===== HTML PAGE ROUTES =====
+// ===== HTML PAGE ROUTES (UPDATED FOR PUBLIC FOLDER) =====
 
-// Serve all HTML pages explicitly
+// Serve all HTML pages from public folder
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.get('/adoption', (req, res) => {
-  res.sendFile(path.join(__dirname, 'adoption.html'));
+  res.sendFile(path.join(__dirname, 'public', 'adoption.html'));
 });
 
 app.get('/rescue', (req, res) => {
-  res.sendFile(path.join(__dirname, 'rescue.html'));
+  res.sendFile(path.join(__dirname, 'public', 'rescue.html'));
 });
 
 app.get('/donation', (req, res) => {
-  res.sendFile(path.join(__dirname, 'donation.html'));
+  res.sendFile(path.join(__dirname, 'public', 'donation.html'));
 });
 
 app.get('/community', (req, res) => {
-  res.sendFile(path.join(__dirname, 'community.html'));
+  res.sendFile(path.join(__dirname, 'public', 'community.html'));
 });
 
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'login.html'));
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
 app.get('/register', (req, res) => {
-  res.sendFile(path.join(__dirname, 'register.html'));
+  res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
 
 // Debug route to check file structure
 app.get('/debug', (req, res) => {
   try {
     const files = fs.readdirSync(__dirname);
-    const htmlFiles = files.filter(file => file.endsWith('.html'));
+    const publicFiles = fs.readdirSync(path.join(__dirname, 'public'));
+    const htmlFiles = publicFiles.filter(file => file.endsWith('.html'));
     
     res.json({
       currentDirectory: __dirname,
-      allFiles: files,
+      publicDirectory: path.join(__dirname, 'public'),
+      rootFiles: files,
+      publicFiles: publicFiles,
       htmlFiles: htmlFiles,
       environment: process.env.NODE_ENV,
       port: PORT
