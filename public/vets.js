@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let userLocation = null;
     let userMarker = null;
 
-    // Fetch vets from server
-    fetch("http://localhost:3000/vets") // replace with your server endpoint
+    // Fetch vets from server - FIXED LINE
+    fetch("/api/vets") // Changed from localhost:3000/vets to /api/vets
         .then(res => res.json())
         .then(vets => {
             vets.forEach(vet => {
@@ -175,10 +175,10 @@ const vetDirectory = document.querySelector(".vet-directory");
 
 let vetCards = [];
 
-// Function to fetch and render vets
+// Function to fetch and render vets - FIXED LINE
 async function fetchVets(query = "") {
     try {
-        const res = await fetch(`http://localhost:3000/hospitals/search?q=${encodeURIComponent(query)}`);
+        const res = await fetch(`/api/vets?location=${encodeURIComponent(query)}`); // Changed from hospitals/search to api/vets
         const vets = await res.json();
 
         vetDirectory.innerHTML = "";
@@ -230,4 +230,3 @@ specializationFilter.addEventListener("change", filterVets);
 
 // Initial fetch
 fetchVets();
-
