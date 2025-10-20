@@ -4,7 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
-const session = require('express-session'); // Added session middleware
+const session = require('express-session');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,9 +12,12 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('.')); // Serve files from current directory
 
-// ===== Session middleware (Added from server (2).js) =====
+// Enhanced static file serving for Render
+app.use(express.static(__dirname)); // Serve everything from root directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Session middleware
 app.use(session({
     secret: 'your-secret-key',
     resave: false,
@@ -32,7 +35,6 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
-    // Generate unique filename with timestamp
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, 'pet-' + uniqueSuffix + path.extname(file.originalname));
   }
@@ -44,7 +46,6 @@ const upload = multer({
     fileSize: 5 * 1024 * 1024 // 5MB limit
   },
   fileFilter: function (req, file, cb) {
-    // Check if file is an image
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
     } else {
@@ -95,9 +96,29 @@ db.connect((err) => {
   });
 });
 
-// ===== AUTHENTICATION ENDPOINTS (Added from server (2).js) =====
+// ===== AUTHENTICATION ENDPOINTS =====
 
-// ===== Registration endpoint =====
+// Create users table if it doesn't exist
+const createUsersTableQuery = `
+  CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('user', 'admin', 'shelter') DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`;
+
+db.execute(createUsersTableQuery, (err) => {
+  if (err) {
+    console.error('Error creating users table:', err);
+  } else {
+    console.log('Users table ready');
+  }
+});
+
+// Registration endpoint
 app.post('/register', (req, res) => {
     const { username, email, password, role } = req.body;
 
@@ -124,7 +145,6 @@ app.post('/register', (req, res) => {
             });
         }
 
-        // Insert new user including role
         const insertQuery = 'INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)';
         db.execute(insertQuery, [username, email, password, role], (err, results) => {
             if (err) {
@@ -142,7 +162,7 @@ app.post('/register', (req, res) => {
     });
 });
 
-// ===== Login endpoint =====
+// Login endpoint
 app.post('/login', (req, res) => {
     const { email, password, role } = req.body;
 
@@ -170,8 +190,6 @@ app.post('/login', (req, res) => {
         }
 
         const user = results[0];
-
-        // Save session
         req.session.userId = user.id;
         req.session.username = user.username;
         req.session.role = user.role;
@@ -184,7 +202,7 @@ app.post('/login', (req, res) => {
     });
 });
 
-// ===== Logout endpoint =====
+// Logout endpoint
 app.post('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -201,7 +219,7 @@ app.post('/logout', (req, res) => {
     });
 });
 
-// ===== Check auth status =====
+// Check auth status
 app.get('/auth/status', (req, res) => {
     if (req.session.userId) {
         res.json({
@@ -214,9 +232,58 @@ app.get('/auth/status', (req, res) => {
     }
 });
 
-// ===== END OF AUTHENTICATION ENDPOINTS =====
+// ===== HTML PAGE ROUTES =====
 
-// Create donations table if it doesn't exist
+// Serve all HTML pages explicitly
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/adoption', (req, res) => {
+  res.sendFile(path.join(__dirname, 'adoption.html'));
+});
+
+app.get('/rescue', (req, res) => {
+  res.sendFile(path.join(__dirname, 'rescue.html'));
+});
+
+app.get('/donation', (req, res) => {
+  res.sendFile(path.join(__dirname, 'donation.html'));
+});
+
+app.get('/community', (req, res) => {
+  res.sendFile(path.join(__dirname, 'community.html'));
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'login.html'));
+});
+
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, 'register.html'));
+});
+
+// Debug route to check file structure
+app.get('/debug', (req, res) => {
+  try {
+    const files = fs.readdirSync(__dirname);
+    const htmlFiles = files.filter(file => file.endsWith('.html'));
+    
+    res.json({
+      currentDirectory: __dirname,
+      allFiles: files,
+      htmlFiles: htmlFiles,
+      environment: process.env.NODE_ENV,
+      port: PORT
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== DATABASE TABLE CREATION =====
+
+// Create donations table
 const createDonationsTableQuery = `
   CREATE TABLE IF NOT EXISTS donations (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -242,7 +309,7 @@ db.execute(createDonationsTableQuery, (err) => {
   }
 });
 
-// Create rescue_cases table if it doesn't exist
+// Create rescue_cases table
 const createRescueCasesTableQuery = `
   CREATE TABLE IF NOT EXISTS rescue_cases (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -266,7 +333,7 @@ db.execute(createRescueCasesTableQuery, (err) => {
   }
 });
 
-// Create rescue_responses table if it doesn't exist
+// Create rescue_responses table
 const createRescueResponsesTableQuery = `
   CREATE TABLE IF NOT EXISTS rescue_responses (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -287,7 +354,7 @@ db.execute(createRescueResponsesTableQuery, (err) => {
   }
 });
 
-// Create veterinary_hospitals table if it doesn't exist
+// Create veterinary_hospitals table
 const createVetHospitalsTableQuery = `
   CREATE TABLE IF NOT EXISTS veterinary_hospitals (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -306,7 +373,7 @@ db.execute(createVetHospitalsTableQuery, (err) => {
   }
 });
 
-// Create appointments table if it doesn't exist
+// Create appointments table
 const createAppointmentsTableQuery = `
   CREATE TABLE IF NOT EXISTS appointments (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -327,7 +394,7 @@ db.execute(createAppointmentsTableQuery, (err) => {
   }
 });
 
-// Create community_posts table if it doesn't exist
+// Create community_posts table
 const createCommunityTableQuery = `
   CREATE TABLE IF NOT EXISTS community_posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -349,7 +416,7 @@ db.execute(createCommunityTableQuery, (err) => {
   }
 });
 
-// Create post_comments table if it doesn't exist
+// Create post_comments table
 const createCommentsTableQuery = `
   CREATE TABLE IF NOT EXISTS post_comments (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -369,7 +436,7 @@ db.execute(createCommentsTableQuery, (err) => {
   }
 });
 
-// Create post_likes table if it doesn't exist
+// Create post_likes table
 const createLikesTableQuery = `
   CREATE TABLE IF NOT EXISTS post_likes (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -389,12 +456,60 @@ db.execute(createLikesTableQuery, (err) => {
   }
 });
 
-// Serve the adoption page
-app.get('/adoption', (req, res) => {
-  res.sendFile(path.join(__dirname, 'adoption.html'));
+// Create lost_found_reports table
+const createLostFoundTableQuery = `
+  CREATE TABLE IF NOT EXISTS lost_found_reports (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    status ENUM('Lost', 'Found') NOT NULL,
+    petName VARCHAR(255),
+    animalType VARCHAR(50) NOT NULL,
+    breed VARCHAR(100),
+    location VARCHAR(255) NOT NULL,
+    date DATE NOT NULL,
+    color VARCHAR(100),
+    description TEXT NOT NULL,
+    contact VARCHAR(255) NOT NULL,
+    reward VARCHAR(100),
+    imagePath VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`;
+
+db.execute(createLostFoundTableQuery, (err) => {
+  if (err) {
+    console.error('Error creating lost_found_reports table:', err);
+  } else {
+    console.log('Lost_found_reports table ready');
+  }
 });
 
-// API endpoint to get all pets for adoption
+// Create emergency_alerts table
+const createEmergencyAlertsTableQuery = `
+  CREATE TABLE IF NOT EXISTS emergency_alerts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(50) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    animal_type VARCHAR(50),
+    urgency VARCHAR(20) NOT NULL,
+    details TEXT NOT NULL,
+    contact VARCHAR(255) NOT NULL,
+    status ENUM('active', 'resolved') DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`;
+
+db.execute(createEmergencyAlertsTableQuery, (err) => {
+  if (err) {
+    console.error('Error creating emergency_alerts table:', err);
+  } else {
+    console.log('Emergency_alerts table ready');
+  }
+});
+
+// ===== API ENDPOINTS =====
+
+// Pets adoption endpoints
 app.get('/api/pets', (req, res) => {
   const query = `
     SELECT id, petName, animalType, breed, age, gender, description, contact, imagePath, createdAt
@@ -408,7 +523,6 @@ app.get('/api/pets', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    // Convert image paths to URLs
     const petsWithImageUrls = results.map(pet => {
       if (pet.imagePath) {
         return {
@@ -416,7 +530,6 @@ app.get('/api/pets', (req, res) => {
           imageData: `/${pet.imagePath}`
         };
       } else {
-        // Return default image based on animal type if no image uploaded
         const defaults = {
           Dog: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80",
           Cat: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=600&q=80",
@@ -435,11 +548,9 @@ app.get('/api/pets', (req, res) => {
   });
 });
 
-// API endpoint to add a new pet for adoption
 app.post('/api/pets', upload.single('petImage'), (req, res) => {
   const { petName, animalType, breed, age, gender, description, contact } = req.body;
   
-  // Validate input
   if (!petName || !animalType || !description || !contact) {
     return res.status(400).json({ error: 'Required fields are missing' });
   }
@@ -467,11 +578,9 @@ app.post('/api/pets', upload.single('petImage'), (req, res) => {
   });
 });
 
-// API endpoint to delete a pet
 app.delete('/api/pets/:id', (req, res) => {
   const petId = req.params.id;
   
-  // First get the pet to check if it has an image to delete
   const getQuery = 'SELECT imagePath FROM pets WHERE id = ?';
   
   db.execute(getQuery, [petId], (err, results) => {
@@ -486,7 +595,6 @@ app.delete('/api/pets/:id', (req, res) => {
     
     const pet = results[0];
     
-    // Delete the image file if it exists
     if (pet.imagePath && fs.existsSync(pet.imagePath)) {
       fs.unlink(pet.imagePath, (err) => {
         if (err) {
@@ -495,7 +603,6 @@ app.delete('/api/pets/:id', (req, res) => {
       });
     }
     
-    // Now delete the pet from the database
     const deleteQuery = 'DELETE FROM pets WHERE id = ?';
     
     db.execute(deleteQuery, [petId], (err, results) => {
@@ -511,14 +618,10 @@ app.delete('/api/pets/:id', (req, res) => {
   });
 });
 
-// Serve uploaded images
-app.use('/uploads', express.static('uploads'));
-
-// API endpoint to submit a rescue case
+// Rescue cases endpoints
 app.post('/api/rescue-cases', (req, res) => {
   const { animalType, conditions, location, city, description, contact, urgency } = req.body;
   
-  // Validate input
   if (!animalType || !conditions || !location || !city || !description || !contact || !urgency) {
     return res.status(400).json({ error: 'All fields are required' });
   }
@@ -541,7 +644,6 @@ app.post('/api/rescue-cases', (req, res) => {
   });
 });
 
-// API endpoint to get all rescue cases
 app.get('/api/rescue-cases', (req, res) => {
   const query = `
     SELECT id, animal_type, conditions, location, city, description, contact, urgency, status, created_at
@@ -566,12 +668,10 @@ app.get('/api/rescue-cases', (req, res) => {
   });
 });
 
-// API endpoint to respond to a rescue case
 app.post('/api/rescue-cases/:id/respond', (req, res) => {
   const caseId = req.params.id;
   const { responder, contact, details } = req.body;
   
-  // Validate input
   if (!responder || !contact) {
     return res.status(400).json({ error: 'Responder name and contact are required' });
   }
@@ -594,12 +694,10 @@ app.post('/api/rescue-cases/:id/respond', (req, res) => {
   });
 });
 
-// API endpoint to update case status
 app.put('/api/rescue-cases/:id/status', (req, res) => {
   const caseId = req.params.id;
   const { status } = req.body;
   
-  // Validate input
   if (!['Reported', 'In Progress', 'Resolved'].includes(status)) {
     return res.status(400).json({ error: 'Invalid status value' });
   }
@@ -650,7 +748,6 @@ app.get('/api/vets', (req, res) => {
 app.post('/api/appointments', (req, res) => {
   const { hospitalId, userName, userContact, appointmentDate } = req.body;
   
-  // Validate input
   if (!hospitalId || !userName || !userContact || !appointmentDate) {
     return res.status(400).json({ error: 'All fields are required' });
   }
@@ -673,17 +770,7 @@ app.post('/api/appointments', (req, res) => {
   });
 });
 
-// Serve other pages
-app.get('/rescue', (req, res) => {
-  res.sendFile(path.join(__dirname, 'rescue.html'));
-});
-
-// Serve the community page
-app.get('/community', (req, res) => {
-  res.sendFile(path.join(__dirname, 'community.html'));
-});
-
-// API endpoint to get all community posts with comments
+// Community endpoints
 app.get('/api/community/posts', (req, res) => {
   const query = `
     SELECT cp.*, 
@@ -705,7 +792,6 @@ app.get('/api/community/posts', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    // Process results to format comments properly
     const postsWithComments = results.map(post => {
       let comments = [];
       
@@ -727,11 +813,9 @@ app.get('/api/community/posts', (req, res) => {
   });
 });
 
-// API endpoint to add a new community post
 app.post('/api/community/posts', upload.single('postImage'), (req, res) => {
   const { title, content, category, author } = req.body;
   
-  // Validate input
   if (!title || !content || !category || !author) {
     return res.status(400).json({ error: 'Required fields are missing' });
   }
@@ -759,12 +843,10 @@ app.post('/api/community/posts', upload.single('postImage'), (req, res) => {
   });
 });
 
-// API endpoint to like a post
 app.post('/api/community/posts/:id/like', (req, res) => {
   const postId = req.params.id;
   const userIp = req.ip || req.connection.remoteAddress;
   
-  // First check if user already liked this post
   const checkQuery = 'SELECT id FROM post_likes WHERE post_id = ? AND user_ip = ?';
   
   db.execute(checkQuery, [postId, userIp], (err, results) => {
@@ -774,11 +856,9 @@ app.post('/api/community/posts/:id/like', (req, res) => {
     }
     
     if (results.length > 0) {
-      // User already liked this post
       return res.status(400).json({ error: 'You already liked this post' });
     }
     
-    // Add like
     const likeQuery = 'INSERT INTO post_likes (post_id, user_ip) VALUES (?, ?)';
     
     db.execute(likeQuery, [postId, userIp], (err, results) => {
@@ -787,7 +867,6 @@ app.post('/api/community/posts/:id/like', (req, res) => {
         return res.status(500).json({ error: 'Database error' });
       }
       
-      // Update likes count in community_posts table
       const updateQuery = 'UPDATE community_posts SET likes_count = likes_count + 1 WHERE id = ?';
       
       db.execute(updateQuery, [postId], (err, results) => {
@@ -804,17 +883,14 @@ app.post('/api/community/posts/:id/like', (req, res) => {
   });
 });
 
-// API endpoint to add a comment to a post
 app.post('/api/community/posts/:id/comment', (req, res) => {
   const postId = req.params.id;
   const { author, comment_text } = req.body;
   
-  // Validate input
   if (!comment_text) {
     return res.status(400).json({ error: 'Comment text is required' });
   }
   
-  // Use a default author if not provided
   const commentAuthor = author || 'Anonymous';
   
   const query = `
@@ -835,11 +911,9 @@ app.post('/api/community/posts/:id/comment', (req, res) => {
   });
 });
 
-// API endpoint to delete a post
 app.delete('/api/community/posts/:id', (req, res) => {
   const postId = req.params.id;
   
-  // First get the post to check if it has an image to delete
   const getQuery = 'SELECT imagePath FROM community_posts WHERE id = ?';
   
   db.execute(getQuery, [postId], (err, results) => {
@@ -854,7 +928,6 @@ app.delete('/api/community/posts/:id', (req, res) => {
     
     const post = results[0];
     
-    // Delete the image file if it exists
     if (post.imagePath && fs.existsSync(post.imagePath)) {
       fs.unlink(post.imagePath, (err) => {
         if (err) {
@@ -863,8 +936,6 @@ app.delete('/api/community/posts/:id', (req, res) => {
       });
     }
     
-    // Now delete the post from the database
-    // (CASCADE will automatically delete related comments and likes)
     const deleteQuery = 'DELETE FROM community_posts WHERE id = ?';
     
     db.execute(deleteQuery, [postId], (err, results) => {
@@ -880,21 +951,14 @@ app.delete('/api/community/posts/:id', (req, res) => {
   });
 });
 
-// Serve the donation page
-app.get('/donation', (req, res) => {
-  res.sendFile(path.join(__dirname, 'donation.html'));
-});
-
-// API endpoint to process donations
+// Donation endpoints
 app.post('/api/donations', (req, res) => {
   const { amount, cause, donor_name, donor_email, donor_phone, payment_method } = req.body;
   
-  // Validate input
   if (!amount || !cause || !donor_name || !donor_email || !donor_phone || !payment_method) {
     return res.status(400).json({ error: 'All fields are required' });
   }
   
-  // Generate receipt ID
   const receiptId = 'PC-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
   
   const query = `
@@ -918,7 +982,6 @@ app.post('/api/donations', (req, res) => {
   });
 });
 
-// API endpoint to get donation statistics (for admin dashboard)
 app.get('/api/donations/stats', (req, res) => {
   const query = `
     SELECT 
@@ -942,7 +1005,6 @@ app.get('/api/donations/stats', (req, res) => {
   });
 });
 
-// API endpoint to get all donations (for admin)
 app.get('/api/donations', (req, res) => {
   const query = `
     SELECT id, amount, cause, donor_name, donor_email, donor_phone, payment_method, receipt_id, created_at
@@ -960,43 +1022,10 @@ app.get('/api/donations', (req, res) => {
   });
 });
 
-// Default route
-app.get('/', (req, res) => {
-  res.send('PawConnect Hub Server is running!');
-});
-
-// Create lost_found_reports table if it doesn't exist
-const createLostFoundTableQuery = `
-  CREATE TABLE IF NOT EXISTS lost_found_reports (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    status ENUM('Lost', 'Found') NOT NULL,
-    petName VARCHAR(255),
-    animalType VARCHAR(50) NOT NULL,
-    breed VARCHAR(100),
-    location VARCHAR(255) NOT NULL,
-    date DATE NOT NULL,
-    color VARCHAR(100),
-    description TEXT NOT NULL,
-    contact VARCHAR(255) NOT NULL,
-    reward VARCHAR(100),
-    imagePath VARCHAR(500),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-  )
-`;
-
-db.execute(createLostFoundTableQuery, (err) => {
-  if (err) {
-    console.error('Error creating lost_found_reports table:', err);
-  } else {
-    console.log('Lost_found_reports table ready');
-  }
-});
-
-// API endpoint to submit a lost/found report
+// Lost & Found endpoints
 app.post('/api/lostfound', upload.single('petImage'), (req, res) => {
   const { status, petName, animalType, breed, location, date, color, description, contact, reward } = req.body;
   
-  // Validate input
   if (!status || !animalType || !location || !date || !description || !contact) {
     return res.status(400).json({ error: 'Required fields are missing' });
   }
@@ -1024,7 +1053,6 @@ app.post('/api/lostfound', upload.single('petImage'), (req, res) => {
   });
 });
 
-// API endpoint to get all lost/found reports
 app.get('/api/lostfound', (req, res) => {
   const query = `
     SELECT id, status, petName, animalType, breed, location, date, color, description, contact, reward, imagePath, created_at
@@ -1038,7 +1066,6 @@ app.get('/api/lostfound', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    // Convert image paths to URLs
     const reportsWithImageUrls = results.map(report => {
       if (report.imagePath) {
         return {
@@ -1046,7 +1073,6 @@ app.get('/api/lostfound', (req, res) => {
           imageData: `/${report.imagePath}`
         };
       } else {
-        // Return default image based on animal type if no image uploaded
         const defaults = {
           Dog: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80",
           Cat: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=600&q=80",
@@ -1065,37 +1091,10 @@ app.get('/api/lostfound', (req, res) => {
   });
 });
 
-// Add this to server.js after the other table creation queries
-
-// Create emergency_alerts table if it doesn't exist
-const createEmergencyAlertsTableQuery = `
-  CREATE TABLE IF NOT EXISTS emergency_alerts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    type VARCHAR(50) NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    location VARCHAR(255) NOT NULL,
-    animal_type VARCHAR(50),
-    urgency VARCHAR(20) NOT NULL,
-    details TEXT NOT NULL,
-    contact VARCHAR(255) NOT NULL,
-    status ENUM('active', 'resolved') DEFAULT 'active',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-  )
-`;
-
-db.execute(createEmergencyAlertsTableQuery, (err) => {
-  if (err) {
-    console.error('Error creating emergency_alerts table:', err);
-  } else {
-    console.log('Emergency_alerts table ready');
-  }
-});
-
-// API endpoint to submit an emergency alert
+// Emergency alerts endpoints
 app.post('/api/emergency-alerts', (req, res) => {
   const { type, title, location, animalType, urgency, details, contact } = req.body;
   
-  // Validate input
   if (!type || !title || !location || !urgency || !details || !contact) {
     return res.status(400).json({ error: 'Required fields are missing' });
   }
@@ -1118,7 +1117,6 @@ app.post('/api/emergency-alerts', (req, res) => {
   });
 });
 
-// API endpoint to get all active emergency alerts
 app.get('/api/emergency-alerts', (req, res) => {
   const query = `
     SELECT id, type, title, location, animal_type as animalType, urgency, details, contact, 
@@ -1144,11 +1142,9 @@ app.get('/api/emergency-alerts', (req, res) => {
   });
 });
 
-// API endpoint to delete/resolve an emergency alert
 app.delete('/api/emergency-alerts/:id', (req, res) => {
   const alertId = req.params.id;
   
-  // Instead of deleting, we'll mark it as resolved
   const query = `
     UPDATE emergency_alerts 
     SET status = 'resolved' 
@@ -1170,11 +1166,44 @@ app.delete('/api/emergency-alerts/:id', (req, res) => {
     });
   });
 });
+
+// Error handling middleware
+app.use((req, res, next) => {
+  res.status(404).send(`
+    <html>
+      <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+        <h1>Page Not Found</h1>
+        <p>The page you're looking for doesn't exist.</p>
+        <p>Available pages:</p>
+        <ul style="list-style: none; padding: 0;">
+          <li><a href="/">Home</a></li>
+          <li><a href="/adoption">Adoption</a></li>
+          <li><a href="/rescue">Rescue</a></li>
+          <li><a href="/donation">Donation</a></li>
+          <li><a href="/community">Community</a></li>
+          <li><a href="/login">Login</a></li>
+          <li><a href="/register">Register</a></li>
+        </ul>
+      </body>
+    </html>
+  `);
+});
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-  console.log(`Adoption page available at http://localhost:${PORT}/adoption`);
-  console.log(`Rescue page available at http://localhost:${PORT}/rescue`);
-  console.log(`Donation page available at http://localhost:${PORT}/donation`);
-  console.log(`Community page available at http://localhost:${PORT}/community`);
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Available pages:`);
+  console.log(`- / (Home)`);
+  console.log(`- /adoption`);
+  console.log(`- /rescue`);
+  console.log(`- /donation`);
+  console.log(`- /community`);
+  console.log(`- /login`);
+  console.log(`- /register`);
+  console.log(`- /debug (for debugging)`);
 });
