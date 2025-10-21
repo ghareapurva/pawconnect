@@ -468,7 +468,7 @@ nav ul li a.active {
                 
                 vetDirectory.innerHTML = '<div class="loading">Searching for veterinary hospitals...</div>';
                 
-                fetch(`http://localhost:3000/api/vets?location=${encodeURIComponent(location)}`)
+                fetch(`/api/vets?location=${encodeURIComponent(location)}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
@@ -538,7 +538,7 @@ nav ul li a.active {
                 const userContact = document.getElementById('userContact').value;
                 const appointmentDate = document.getElementById('appointmentDate').value;
                 
-                fetch('http://localhost:3000/api/appointments', {
+                fetch('/api/vets', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
