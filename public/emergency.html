@@ -557,7 +557,7 @@ nav ul li a.active {
                     
                     try {
                         // Send alert to server
-                        const response = await fetch('/api/emergency-alerts', {
+                        const response = await fetch('https://pawconnect-u65b.onrender.com/api/emergency-alerts', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -592,7 +592,7 @@ nav ul li a.active {
             // Load alerts from server
             async function loadAlertsFromServer() {
                 try {
-                    const response = await fetch('/api/emergency-alerts');
+                    const response = await fetch('https://pawconnect-u65b.onrender.com/api/emergency-alerts');
                     if (response.ok) {
                         const alerts = await response.json();
                         
@@ -673,7 +673,7 @@ nav ul li a.active {
                     try {
                         // If alert has an ID, delete it from server
                         if (alertData.id) {
-                            await fetch(`/api/emergency-alerts/${alertData.id}`, {
+                            await fetch(`https://pawconnect-u65b.onrender.com/api/emergency-alerts/${alertData.id}`, {
                                 method: 'DELETE'
                             });
                         }

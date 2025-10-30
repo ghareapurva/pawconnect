@@ -993,7 +993,7 @@ nav ul li a.active {
             
             try {
                 // Send donation data to backend
-                const response = await fetch('/api/donations', {
+                const response = await fetch('https://pawconnect-u65b.onrender.com/api/donations', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1089,8 +1089,12 @@ nav ul li a.active {
         amountOptions[0].click();
         
         // Remove QR code generation since we're not processing real payments
-        document.getElementById('qr-code-placeholder').innerHTML = '<p>Thank you for your donation!</p>';
-        document.getElementById('upi-display').textContent = 'pawconnect@example';
+        // Add your actual QR code and UPI ID
+// Change this in your donations.html file
+ddocument.getElementById('qr-code-placeholder').innerHTML = `
+    <img src="https://pawconnect-u65b.onrender.com/donation-qr.jpg" alt="PawConnect UPI QR Code" style="max-width: 100%; height: auto;">
+`;
+document.getElementById('upi-display').textContent = '9405419932@axl'; // Replace with actual UPI ID
     });
 </script>
 </body>

@@ -44,7 +44,7 @@ if (loginForm) {
     const role = document.getElementById('role').value;
 
     try {
-      const response = await fetch('http://localhost:3000/login', {
+      const response = await fetch('https://pawconnect-u65b.onrender.com/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, role })
@@ -81,7 +81,7 @@ if (signupForm) {
     const role = document.getElementById('signupRole').value;
 
     try {
-      const response = await fetch('http://localhost:3000/register', {
+      const response = await fetch('https://pawconnect-u65b.onrender.com/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: name, email, password, role })

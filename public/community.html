@@ -717,7 +717,7 @@ nav ul li a.active {
             }
             
             try {
-                const res = await fetch('/api/community/posts', {
+                const res = await fetch('https://pawconnect-u65b.onrender.com/api/community/posts', {
                     method: 'POST',
                     body: formData
                 });
@@ -745,7 +745,7 @@ nav ul li a.active {
         // Function to load posts from backend
         async function loadPostsFromBackend() {
             try {
-                const response = await fetch('/api/community/posts');
+                const response = await fetch('https://pawconnect-u65b.onrender.com/api/community/posts');
                 const postsData = await response.json();
                 
                 if (Array.isArray(postsData)) {
@@ -777,7 +777,7 @@ nav ul li a.active {
                 
                 let imageHTML = "";
                 if (post.imagePath) {
-                    imageHTML = `<div class="post-image"><img src="/${post.imagePath}" alt="Post image"></div>`;
+                 imageHTML = `<div class="post-image"><img src="${post.imagePath}" alt="Post image"></div>`;
                 }
                 
                 // Generate comments HTML
@@ -880,7 +880,7 @@ nav ul li a.active {
             const postId = parseInt(e.currentTarget.getAttribute('data-post-id'));
             
             try {
-                const res = await fetch(`/api/community/posts/${postId}/like`, {
+                const res = await fetch(`https://pawconnect-u65b.onrender.com/api/community/posts/${postId}/like`, {
                     method: 'POST'
                 });
                 
@@ -924,7 +924,7 @@ nav ul li a.active {
             try {
                 const author = document.querySelector("#author").value.trim() || 'Anonymous';
                 
-                const res = await fetch(`/api/community/posts/${postId}/comment`, {
+                const res = await fetch(`https://pawconnect-u65b.onrender.com/api/community/posts/${postId}/comment`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

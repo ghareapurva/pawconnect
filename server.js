@@ -527,12 +527,12 @@ app.get('/api/pets', (req, res) => {
     }
     
     const petsWithImageUrls = results.map(pet => {
-      if (pet.imagePath) {
-        return {
-          ...pet,
-          imageData: `/${pet.imagePath}`
-        };
-      } else {
+  if (pet.imagePath) {
+    return {
+      ...pet,
+      imageData: `https://pawconnect-u65b.onrender.com/${pet.imagePath}`
+    };
+  }  else {
         const defaults = {
           Dog: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80",
           Cat: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=600&q=80",
@@ -795,22 +795,29 @@ app.get('/api/community/posts', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    const postsWithComments = results.map(post => {
-      let comments = [];
-      
-      if (post.comments_data) {
-        comments = post.comments_data.split(';;;;').map(commentStr => {
-          const [author, comment_text, created_at] = commentStr.split('|||');
-          return { author, comment_text, created_at };
-        });
-      }
-      
-      return {
-        ...post,
-        likes_count: parseInt(post.likes_count) || 0,
-        comments
-      };
+  const postsWithComments = results.map(post => {
+  let comments = [];
+  
+  if (post.comments_data) {
+    comments = post.comments_data.split(';;;;').map(commentStr => {
+      const [author, comment_text, created_at] = commentStr.split('|||');
+      return { author, comment_text, created_at };
     });
+  }
+  
+  // ADD THESE 4 LINES:
+  let imagePath = post.imagePath;
+  if (imagePath) {
+    imagePath = `https://pawconnect-u65b.onrender.com/${post.imagePath}`;
+  }
+  
+  return {
+    ...post,
+    imagePath: imagePath, // ← ADD THIS
+    likes_count: parseInt(post.likes_count) || 0,
+    comments
+  };
+});
     
     res.json(postsWithComments);
   });
@@ -1070,12 +1077,12 @@ app.get('/api/lostfound', (req, res) => {
     }
     
     const reportsWithImageUrls = results.map(report => {
-      if (report.imagePath) {
-        return {
-          ...report,
-          imageData: `/${report.imagePath}`
-        };
-      } else {
+  if (report.imagePath) {
+    return {
+      ...report,
+      imageData: `https://pawconnect-u65b.onrender.com/${report.imagePath}`
+    };
+  }else {
         const defaults = {
           Dog: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80",
           Cat: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=600&q=80",
