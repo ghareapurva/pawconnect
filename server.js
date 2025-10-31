@@ -154,7 +154,7 @@ app.post('/register', (req, res) => {
                 });
             }
 
-            res.status(201).json({
+            return res.status(201).json({
                 success: true,
                 message: '🎉 Registration successful! You can now login.'
             });
@@ -194,7 +194,7 @@ app.post('/login', (req, res) => {
         req.session.username = user.username;
         req.session.role = user.role;
 
-        res.json({
+        return res.json({
             success: true,
             message: '✅ Login successful!',
             redirect: '/'
@@ -212,7 +212,7 @@ app.post('/logout', (req, res) => {
             });
         }
         res.clearCookie('connect.sid');
-        res.json({
+        return res.json({
             success: true,
             message: 'Logout successful'
         });
@@ -222,13 +222,13 @@ app.post('/logout', (req, res) => {
 // Check auth status
 app.get('/auth/status', (req, res) => {
     if (req.session.userId) {
-        res.json({
+        return res.json({
             loggedIn: true,
             username: req.session.username,
             role: req.session.role
         });
     } else {
-        res.json({ loggedIn: false });
+        return res.json({ loggedIn: false });
     }
 });
 
@@ -270,7 +270,7 @@ app.get('/debug', (req, res) => {
     const publicFiles = fs.readdirSync(path.join(__dirname, 'public'));
     const htmlFiles = publicFiles.filter(file => file.endsWith('.html'));
     
-    res.json({
+    return res.json({
       currentDirectory: __dirname,
       publicDirectory: path.join(__dirname, 'public'),
       rootFiles: files,
@@ -280,7 +280,7 @@ app.get('/debug', (req, res) => {
       port: PORT
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 });
 
@@ -527,12 +527,12 @@ app.get('/api/pets', (req, res) => {
     }
     
     const petsWithImageUrls = results.map(pet => {
-  if (pet.imagePath) {
-    return {
-      ...pet,
-      imageData: `https://pawconnect-u65b.onrender.com/${pet.imagePath}`
-    };
-  }  else {
+      if (pet.imagePath) {
+        return {
+          ...pet,
+          imageData: `https://pawconnect-u65b.onrender.com/${pet.imagePath}`
+        };
+      } else {
         const defaults = {
           Dog: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80",
           Cat: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=600&q=80",
@@ -547,7 +547,7 @@ app.get('/api/pets', (req, res) => {
       }
     });
     
-    res.json(petsWithImageUrls);
+    return res.json(petsWithImageUrls);
   });
 });
 
@@ -574,7 +574,7 @@ app.post('/api/pets', upload.single('petImage'), (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json({ 
+    return res.json({ 
       message: 'Pet added successfully', 
       petId: results.insertId 
     });
@@ -614,7 +614,7 @@ app.delete('/api/pets/:id', (req, res) => {
         return res.status(500).json({ error: 'Database error' });
       }
       
-      res.json({ 
+      return res.json({ 
         message: 'Pet removed successfully'
       });
     });
@@ -640,7 +640,7 @@ app.post('/api/rescue-cases', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json({ 
+    return res.json({ 
       message: 'Rescue case submitted successfully', 
       caseId: results.insertId 
     });
@@ -667,7 +667,7 @@ app.get('/api/rescue-cases', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json(results);
+    return res.json(results);
   });
 });
 
@@ -690,7 +690,7 @@ app.post('/api/rescue-cases/:id/respond', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json({ 
+    return res.json({ 
       message: 'Response recorded successfully', 
       responseId: results.insertId 
     });
@@ -717,7 +717,7 @@ app.put('/api/rescue-cases/:id/status', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json({ 
+    return res.json({ 
       message: 'Case status updated successfully'
     });
   });
@@ -744,7 +744,7 @@ app.get('/api/vets', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json(results);
+    return res.json(results);
   });
 });
 
@@ -766,7 +766,7 @@ app.post('/api/appointments', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json({ 
+    return res.json({ 
       message: 'Appointment booked successfully', 
       appointmentId: results.insertId 
     });
@@ -795,31 +795,30 @@ app.get('/api/community/posts', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-  const postsWithComments = results.map(post => {
-  let comments = [];
-  
-  if (post.comments_data) {
-    comments = post.comments_data.split(';;;;').map(commentStr => {
-      const [author, comment_text, created_at] = commentStr.split('|||');
-      return { author, comment_text, created_at };
+    const postsWithComments = results.map(post => {
+      let comments = [];
+      
+      if (post.comments_data) {
+        comments = post.comments_data.split(';;;;').map(commentStr => {
+          const [author, comment_text, created_at] = commentStr.split('|||');
+          return { author, comment_text, created_at };
+        });
+      }
+      
+      let imagePath = post.imagePath;
+      if (imagePath) {
+        imagePath = `https://pawconnect-u65b.onrender.com/${post.imagePath}`;
+      }
+      
+      return {
+        ...post,
+        imagePath: imagePath,
+        likes_count: parseInt(post.likes_count) || 0,
+        comments
+      };
     });
-  }
-  
-  // ADD THESE 4 LINES:
-  let imagePath = post.imagePath;
-  if (imagePath) {
-    imagePath = `https://pawconnect-u65b.onrender.com/${post.imagePath}`;
-  }
-  
-  return {
-    ...post,
-    imagePath: imagePath, // ← ADD THIS
-    likes_count: parseInt(post.likes_count) || 0,
-    comments
-  };
-});
     
-    res.json(postsWithComments);
+    return res.json(postsWithComments);
   });
 });
 
@@ -846,7 +845,7 @@ app.post('/api/community/posts', upload.single('postImage'), (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json({ 
+    return res.json({ 
       message: 'Post created successfully', 
       postId: results.insertId 
     });
@@ -885,7 +884,7 @@ app.post('/api/community/posts/:id/like', (req, res) => {
           return res.status(500).json({ error: 'Database error' });
         }
         
-        res.json({ 
+        return res.json({ 
           message: 'Post liked successfully'
         });
       });
@@ -914,7 +913,7 @@ app.post('/api/community/posts/:id/comment', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json({ 
+    return res.json({ 
       message: 'Comment added successfully', 
       commentId: results.insertId 
     });
@@ -954,7 +953,7 @@ app.delete('/api/community/posts/:id', (req, res) => {
         return res.status(500).json({ error: 'Database error' });
       }
       
-      res.json({ 
+      return res.json({ 
         message: 'Post deleted successfully'
       });
     });
@@ -982,7 +981,7 @@ app.post('/api/donations', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json({ 
+    return res.json({ 
       success: true,
       message: 'Donation recorded successfully',
       donationId: results.insertId,
@@ -1011,7 +1010,7 @@ app.get('/api/donations/stats', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json(results);
+    return res.json(results);
   });
 });
 
@@ -1028,7 +1027,7 @@ app.get('/api/donations', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json(results);
+    return res.json(results);
   });
 });
 
@@ -1056,7 +1055,7 @@ app.post('/api/lostfound', upload.single('petImage'), (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json({ 
+    return res.json({ 
       message: 'Report submitted successfully', 
       reportId: results.insertId 
     });
@@ -1077,12 +1076,12 @@ app.get('/api/lostfound', (req, res) => {
     }
     
     const reportsWithImageUrls = results.map(report => {
-  if (report.imagePath) {
-    return {
-      ...report,
-      imageData: `https://pawconnect-u65b.onrender.com/${report.imagePath}`
-    };
-  }else {
+      if (report.imagePath) {
+        return {
+          ...report,
+          imageData: `https://pawconnect-u65b.onrender.com/${report.imagePath}`
+        };
+      } else {
         const defaults = {
           Dog: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80",
           Cat: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=600&q=80",
@@ -1097,7 +1096,7 @@ app.get('/api/lostfound', (req, res) => {
       }
     });
     
-    res.json(reportsWithImageUrls);
+    return res.json(reportsWithImageUrls);
   });
 });
 
@@ -1120,7 +1119,7 @@ app.post('/api/emergency-alerts', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json({ 
+    return res.json({ 
       message: 'Emergency alert submitted successfully', 
       alertId: results.insertId 
     });
@@ -1148,7 +1147,7 @@ app.get('/api/emergency-alerts', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    res.json(results);
+    return res.json(results);
   });
 });
 
@@ -1171,7 +1170,7 @@ app.delete('/api/emergency-alerts/:id', (req, res) => {
       return res.status(404).json({ error: 'Alert not found' });
     }
     
-    res.json({ 
+    return res.json({ 
       message: 'Alert resolved successfully'
     });
   });
@@ -1179,7 +1178,7 @@ app.delete('/api/emergency-alerts/:id', (req, res) => {
 
 // Error handling middleware
 app.use((req, res, next) => {
-  res.status(404).send(`
+  return res.status(404).send(`
     <html>
       <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
         <h1>Page Not Found</h1>
@@ -1201,7 +1200,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send('Something broke!');
+  return res.status(500).send('Something broke!');
 });
 
 // Start server
