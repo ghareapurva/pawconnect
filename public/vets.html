@@ -532,40 +532,41 @@ nav ul li a.active {
                 appointmentModal.style.display = 'flex';
             }
             
-            function bookAppointment() {
-                const hospitalId = document.getElementById('hospitalId').value;
-                const userName = document.getElementById('userName').value;
-                const userContact = document.getElementById('userContact').value;
-                const appointmentDate = document.getElementById('appointmentDate').value;
-                
-                fetch('/api/vets', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        hospitalId: parseInt(hospitalId),
-                        userName,
-                        userContact,
-                        appointmentDate
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to book appointment');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    alert('Appointment booked successfully!');
-                    appointmentModal.style.display = 'none';
-                    appointmentForm.reset();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error booking appointment. Please try again.');
-                });
-            }
+   function bookAppointment() {
+    const hospitalId = document.getElementById('hospitalId').value;
+    const userName = document.getElementById('userName').value;
+    const userContact = document.getElementById('userContact').value;
+    const appointmentDate = document.getElementById('appointmentDate').value;
+    
+    // ✅ CORRECT ENDPOINT - matches your backend
+    fetch('/api/appointments', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            hospitalId: parseInt(hospitalId),
+            userName,
+            userContact,
+            appointmentDate
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to book appointment');
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert('Appointment booked successfully!');
+        appointmentModal.style.display = 'none';
+        appointmentForm.reset();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error booking appointment. Please try again.');
+    });
+}
         });
     </script>
 </body>
